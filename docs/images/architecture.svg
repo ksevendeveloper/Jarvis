@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <style>
+    .title{font: 700 20px/1.2 sans-serif}
+    .node{fill:#f6f8fa;stroke:#cbd5e1;stroke-width:2;rx:8}
+    .text{font:600 14px/1.2 sans-serif;fill:#102a43}
+    .sub{font:400 12px/1.2 sans-serif;fill:#334155}
+    .arrow{stroke:#64748b;stroke-width:2;marker-end:url(#arrow)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <text x="20" y="30" class="title">Arquitetura (Fluxo Geral)</text>
+
+  <rect x="40" y="70" width="260" height="120" class="node"/>
+  <text x="60" y="100" class="text">Frontend (Next.js)</text>
+  <text x="60" y="122" class="sub">- Login JWT</text>
+  <text x="60" y="140" class="sub">- Socket.IO realtime</text>
+
+  <rect x="420" y="50" width="320" height="200" class="node"/>
+  <text x="440" y="90" class="text">Backend (FastAPI + Socket.IO)</text>
+  <text x="440" y="112" class="sub">- Autenticação JWT</text>
+  <text x="440" y="132" class="sub">- Endpoints REST</text>
+  <text x="440" y="152" class="sub">- Emissão de eventos via Socket.IO</text>
+
+  <rect x="820" y="70" width="320" height="120" class="node"/>
+  <text x="840" y="100" class="text">Serviços Locais</text>
+  <text x="840" y="122" class="sub">- PostgreSQL / SQLite</text>
+  <text x="840" y="140" class="sub">- Ollama (Llama3 local)</text>
+
+  <line x1="300" y1="130" x2="420" y2="130" class="arrow"/>
+  <line x1="740" y1="150" x2="820" y2="150" class="arrow"/>
+
+  <rect x="420" y="280" width="320" height="80" class="node"/>
+  <text x="440" y="310" class="text">Workers / Scripts</text>
+  <text x="440" y="332" class="sub">- Execução de comandos</text>
+
+  <line x1="590" y1="250" x2="590" y2="280" class="arrow"/>
+
+  <text x="40" y="520" class="sub">Legenda: JWT = autenticação, Socket.IO = comunicação em tempo real</text>
+</svg>

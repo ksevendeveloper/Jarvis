@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420">
+  <style>
+    .title{font:700 18px/1.2 sans-serif}
+    .box{fill:#ffffff;stroke:#93c5fd;stroke-width:2;rx:8}
+    .text{font:600 13px/1.2 sans-serif;fill:#0f172a}
+    .sub{font:400 12px/1.2 sans-serif;fill:#334155}
+    .arrow{stroke:#475569;stroke-width:2;marker-end:url(#a)}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569" />
+    </marker>
+  </defs>
+  <text x="20" y="30" class="title">Fluxo: Mensagem → Conscience → JarvisAI → Ação</text>
+
+  <rect x="40" y="70" width="200" height="80" class="box"/>
+  <text x="60" y="100" class="text">1. Usuário</text>
+  <text x="60" y="122" class="sub">Envia mensagem / comando</text>
+
+  <rect x="300" y="60" width="220" height="100" class="box"/>
+  <text x="320" y="95" class="text">2. Conscience</text>
+  <text x="320" y="117" class="sub">Validação e regras de segurança</text>
+
+  <rect x="600" y="60" width="260" height="100" class="box"/>
+  <text x="620" y="95" class="text">3. JarvisAI (Ollama)</text>
+  <text x="620" y="117" class="sub">Gera resposta e decide executar</text>
+
+  <rect x="300" y="220" width="560" height="100" class="box"/>
+  <text x="320" y="255" class="text">4. Execução</text>
+  <text x="320" y="277" class="sub">Se autorizado, `run_and_emit` executa comando e emite status</text>
+
+  <line x1="240" y1="110" x2="300" y2="110" class="arrow"/>
+  <line x1="520" y1="110" x2="600" y2="110" class="arrow"/>
+  <line x1="730" y1="160" x2="730" y2="220" class="arrow"/>
+
+  <text x="40" y="360" class="sub">Observação: Histórico de conversas é persistido em DB para contexto.</text>
+</svg>

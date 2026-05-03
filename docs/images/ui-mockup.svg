@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <style>
+    .bg{fill:#0f172a}
+    .panel{fill:#ffffff;rx:8}
+    .header{font:700 18px/1.2 sans-serif;fill:#0f172a}
+    .muted{font:400 12px/1.2 sans-serif;fill:#475569}
+    .msg{font:400 14px/1.4 sans-serif;fill:#0f172a}
+    .btn{fill:#06b6d4;rx:6}
+  </style>
+  <rect width="100%" height="100%" fill="#f8fafc"/>
+  <rect x="40" y="40" width="820" height="520" class="panel"/>
+  <text x="60" y="78" class="header">Jarvis — Painel</text>
+  <text x="60" y="100" class="muted">Conexão: Socket.IO | Usuário: admin</text>
+
+  <rect x="60" y="130" width="540" height="360" fill="#f1f5f9" rx="6"/>
+  <text x="80" y="160" class="msg">admin: Reinicie o servidor web</text>
+  <text x="80" y="190" class="msg">Jarvis: Confirmei. Executando: sudo systemctl restart nginx</text>
+
+  <rect x="620" y="130" width="200" height="200" fill="#fff" rx="6" stroke="#e2e8f0"/>
+  <text x="640" y="160" class="muted">Status</text>
+  <text x="640" y="190" class="msg">Última ação: restart nginx</text>
+  <text x="640" y="215" class="msg">Status: success</text>
+
+  <rect x="60" y="510" width="540" height="40" rx="6" fill="#fff" stroke="#e2e8f0"/>
+  <rect x="620" y="510" width="200" height="40" class="btn"/>
+  <text x="650" y="536" class="header" fill="#fff">Enviar</text>
+</svg>

@@ -22,3 +22,7 @@ Notas:
 PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin
 ```
 
+Visualização rápida (UI mockup):
+
+![Mockup UI Jarvis](../docs/images/ui-mockup.svg)
+

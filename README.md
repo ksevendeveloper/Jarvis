@@ -7,8 +7,12 @@ Jarvis é um assistente self-hosted projetado para rodar localmente em Ubuntu. E
 - Scripts de sistema em `scripts/` (instalador inteligente, utilitários, testes).
 - Módulos core em `core/` para IA, voz e políticas (placeholders para integração futura).
 
-Arquitetura resumida
+- Arquitetura resumida
 - `core/` — lógica do assistente, integração com IA local (Ollama/Llama3), `voice.py`, `conscience.py`.
+
+![Arquitetura do Jarvis](docs/images/architecture.svg)
+
+Figura: Diagrama de arquitetura mostrando Next.js ↔ FastAPI ↔ Ollama / DB / Workers.
 - `api/` — rotas REST e auth (`/api/auth/login`).
 - `web/` — frontend Next.js (login, painel com eventos Socket.IO).
 - `scripts/` — `installer.sh`, `run_command.sh`, `test_socketio_client.py`, entre outros.

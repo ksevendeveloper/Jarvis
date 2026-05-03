@@ -2,6 +2,16 @@
 
 Este documento lista as funcionalidades esperadas de um assistente "Jarvis" completo, o que já implementamos neste repositório e o que ainda falta para chegarmos a um Jarvis operacional.
 
+Diagramas rápidos
+
+![Arquitetura do Jarvis](docs/images/architecture.svg)
+
+![Fluxo de mensagens e execução](docs/images/workflow.svg)
+
+UI (mockup):
+
+![Mockup UI Jarvis](docs/images/ui-mockup.svg)
+
 Sumário rápido
 - O que temos (implementado / parcial): backend FastAPI + Socket.IO, endpoint `/api/execute`, instalador inteligente (`scripts/installer.sh`), CLI (`cli.sh`), scaffold web Next.js com login JWT, placeholders em `core/` (voz/conscience), scripts utilitários e documentação básica (`README.md`, `INSTALL.md`).
 - O que falta (principais itens): integração IA local (Ollama), STT/TTS funcional, persistência (PostgreSQL/Redis fully integrated), validação JWT no Socket.IO, segurança/HTTPS, deploy (systemd/Docker), testes, auditoria e controles avançados de hardware.

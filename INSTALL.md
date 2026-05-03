@@ -27,6 +27,12 @@ pip install -r requirements.txt
 
 Nota: se você não tiver PostgreSQL disponível durante o desenvolvimento, o backend usará um fallback SQLite (`jarvis.db`). Em produção, configure `DATABASE_URL` para seu PostgreSQL.
 
+Fluxo de processamento
+
+![Fluxo de mensagens e execução](docs/images/workflow.svg)
+
+Figura: Como uma mensagem do usuário atravessa o sistema — passa pela `conscience`, é processada pela IA (Ollama) e pode disparar execução de comandos.
+
 3) Variáveis de ambiente recomendadas
 
 Crie um arquivo `.env` na raiz ou exporte variáveis no shell. Exemplo mínimo:
