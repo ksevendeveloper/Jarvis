@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Cliente de teste que conecta via Socket.IO, envia um POST para /api/execute e imprime eventos."""
+"""Cliente de teste com autenticação JWT para /api/execute e Socket.IO."""
+import argparse
 import asyncio
-import json
-import sys
 
 import httpx
 import socketio
@@ -11,7 +10,19 @@ import socketio
 SERVER = "http://localhost:8000"
 
 
-async def main(cmd: str = "echo hello && sleep 1 && echo done"):
+async def fetch_token(username: str, password: str) -> str:
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(
+            f"{SERVER}/api/auth/login",
+            json={"username": username, "password": password},
+            timeout=10.0,
+        )
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+
+
+async def main(cmd: str, username: str, password: str):
+    token = await fetch_token(username, password)
     sio = socketio.AsyncClient()
 
     @sio.event
@@ -40,16 +51,27 @@ async def main(cmd: str = "echo hello && sleep 1 && echo done"):
         print("[event:error]", data)
         await sio.disconnect()
 
-    await sio.connect(SERVER)
+    await sio.connect(SERVER, auth={"token": token})
 
+    headers = {"Authorization": f"Bearer {token}"}
     async with httpx.AsyncClient() as client:
-        resp = await client.post(f"{SERVER}/api/execute", json={"command": cmd}, timeout=10.0)
+        resp = await client.post(
+            f"{SERVER}/api/execute",
+            json={"command": cmd},
+            headers=headers,
+            timeout=10.0,
+        )
         print("POST /api/execute ->", resp.status_code, resp.text)
 
-    # aguardar eventos até desconexão
     await sio.wait()
 
 
 if __name__ == "__main__":
-    cmd = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "echo hello && sleep 1 && echo done"
-    asyncio.run(main(cmd))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", nargs="*", default=["echo hello && sleep 1 && echo done"])
+    parser.add_argument("--username", default="admin")
+    parser.add_argument("--password", default="admin")
+    args = parser.parse_args()
+
+    command = " ".join(args.command).strip()
+    asyncio.run(main(command, args.username, args.password))

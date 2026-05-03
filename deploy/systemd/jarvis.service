@@ -1,0 +1,18 @@
+[Unit]
+Description=Jarvis FastAPI Backend
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+WorkingDirectory=/home/%i/Jarvis
+EnvironmentFile=/home/%i/Jarvis/.env
+ExecStart=/home/%i/Jarvis/.venv/bin/uvicorn main:asgi_app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

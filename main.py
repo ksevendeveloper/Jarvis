@@ -1,15 +1,17 @@
 import asyncio
 import os
+import shlex
 from typing import Dict
 
 import socketio
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks, Depends, HTTPException, status
 from db import engine, Base, SessionLocal
 from api import models as orm_models
 from api import auth as auth_module
 from api.routes import router as api_router
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from core.conscience import Conscience
 
 # Socket.IO server (ASGI)
 sio = socketio.AsyncServer(async_mode="asgi", cors_allowed_origins="*")
@@ -35,6 +37,37 @@ Base.metadata.create_all(bind=engine)
 
 class ExecuteRequest(BaseModel):
     command: str
+
+
+conscience = Conscience()
+DEFAULT_ALLOWED = "echo,pwd,ls,whoami,date,uptime,cat,head,tail,grep,rg"
+ALLOWED_COMMANDS = {
+    part.strip().lower()
+    for part in os.environ.get("JARVIS_ALLOWED_COMMANDS", DEFAULT_ALLOWED).split(",")
+    if part.strip()
+}
+
+
+def _command_base(command: str) -> str:
+    try:
+        parts = shlex.split(command)
+    except ValueError:
+        return ""
+    return parts[0].lower() if parts else ""
+
+
+def validate_command(command: str):
+    allowed, reason = conscience.evaluate_action(command)
+    if not allowed:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=reason)
+    base = _command_base(command)
+    if not base:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid command.")
+    if base not in ALLOWED_COMMANDS:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Command '{base}' is not in allowlist.",
+        )
 
 
 @sio.event
@@ -77,14 +110,24 @@ async def health():
 
 
 @app.post("/api/execute")
-async def execute(req: ExecuteRequest, background_tasks: BackgroundTasks):
+async def execute(
+    req: ExecuteRequest,
+    background_tasks: BackgroundTasks,
+    current_user: orm_models.User = Depends(auth_module.get_current_user),
+):
     """Agenda a execução de um comando no sistema e emite eventos Socket.IO.
 
     Retorna imediatamente um ack e executa o comando em background.
     """
     cmd = req.command
-    background_tasks.add_task(run_and_emit, cmd)
-    return {"status": "scheduled", "command": cmd}
+    validate_command(cmd)
+    room = f"user:{current_user.username}"
+    background_tasks.add_task(run_and_emit, cmd, room)
+    return {
+        "status": "scheduled",
+        "command": cmd,
+        "submitted_by": current_user.username,
+    }
 
 
 async def run_and_emit(cmd: str, room: str = None):

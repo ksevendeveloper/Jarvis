@@ -13,8 +13,8 @@ UI (mockup):
 ![Mockup UI Jarvis](docs/images/ui-mockup.svg)
 
 Sumário rápido
-- O que temos (implementado / parcial): backend FastAPI + Socket.IO, endpoint `/api/execute`, instalador inteligente (`scripts/installer.sh`), CLI (`cli.sh`), scaffold web Next.js com login JWT, placeholders em `core/` (voz/conscience), scripts utilitários e documentação básica (`README.md`, `INSTALL.md`).
-- O que falta (principais itens): integração IA local (Ollama), STT/TTS funcional, persistência (PostgreSQL/Redis fully integrated), validação JWT no Socket.IO, segurança/HTTPS, deploy (systemd/Docker), testes, auditoria e controles avançados de hardware.
+- O que temos (implementado / parcial): backend FastAPI + Socket.IO com JWT no `connect`, endpoint `/api/execute` com JWT obrigatório + policy/allowlist, instalador inteligente (`scripts/installer.sh`), CLI (`cli.sh`) incluindo `fx-on/fx-off`, scaffold web Next.js com login JWT e efeito visual de atividade, testes automatizados básicos (`pytest`), unit file `systemd`, scripts utilitários e documentação (`README.md`, `INSTALL.md`).
+- O que falta (principais itens): integração IA local completa (Ollama), STT/TTS funcional, persistência avançada (migrations/Alembic + Redis real), segurança de produção (HTTPS/rate limit/refresh token), auditoria aprofundada e controles avançados de hardware.
 
 Detalhamento por área
 
@@ -30,17 +30,17 @@ Detalhamento por área
 
 3) Controle do Sistema
 - Objetivo: executar comandos seguros, gerenciar serviços, acesso a hardware (microfone, câmera, GPIO), agendamento e automações.
-  - Status: Implementado parcialmente — `POST /api/execute` executa comandos via subprocess e emite eventos Socket.IO; `scripts/run_command.sh` e `cli.sh` fornecem utilitários básicos.
-  - Falta: autorização/escopo por comando, sandboxing/limitação, verificação de segurança antes de execução (usar `conscience`), logs/auditoria por usuário, drivers de hardware específicos.
+  - Status: Implementado parcialmente — `POST /api/execute` exige JWT, valida comando por `conscience` + allowlist (`JARVIS_ALLOWED_COMMANDS`), executa via subprocess e emite eventos Socket.IO; `scripts/run_command.sh` e `cli.sh` fornecem utilitários.
+  - Falta: sandboxing mais forte, políticas por role, auditoria detalhada por usuário e drivers de hardware específicos.
 
 4) Comunicação em tempo real
 - Objetivo: eventos em tempo real entre backend e frontend (Socket.IO), notificação de estados (`listening`, `thinking`, `executing`, `success`, `error`).
   - Status: Implementado — `socketio.AsyncServer` e emissões (`executing`, `success`, `error`, `status`); cliente de teste em `scripts/test_socketio_client.py` e frontend conecta com `socket.io-client`.
-  - Falta: validar token JWT no `connect`, escopos por socket, reconexão e políticas de CORS/segurança.
+  - Falta: eventos avançados (`listening`/`thinking`), reconexão com métricas e políticas CORS de produção.
 
 5) Web UI
 - Objetivo: painel moderno (React/Next.js) que mostra eventos, aceita comandos por UI, autenticação, perfil de usuário e configurações.
-  - Status: Scaffold inicial em `web/` com `login` (salva JWT) e dashboard básico recebendo eventos.
+  - Status: Scaffold funcional em `web/` com `login` (salva JWT), dashboard de eventos e efeito visual de estado em tempo real.
   - Falta: páginas de configuração, tela de execução de comandos, proteção de rotas (SSR), gerenciamento de usuários, UX polish e assets/ícones.
 
 6) Persistência e Cache
@@ -50,18 +50,18 @@ Detalhamento por área
 
 7) Autenticação e Segurança
 - Objetivo: login, roles, refresh tokens, proteção de endpoints, TLS/HTTPS, firewall.
-  - Status: Endpoint básico `POST /api/auth/login` com JWT; in-memory user store (`admin:admin`), passlib para hashing.
-  - Falta: validação de JWT no Socket.IO, refresh tokens, armazenamento seguro de secrets, força de senhas, HTTPS, políticas CORS restritivas, rate limiting.
+  - Status: `POST /api/auth/login` com JWT e usuários via SQLAlchemy (SQLite fallback/Postgres via `DATABASE_URL`), JWT validado no Socket.IO `connect`, `/api/execute` protegido por JWT.
+  - Falta: refresh tokens, força de senha/política, HTTPS, CORS restritivo por ambiente, rate limiting e rotação automatizada de segredos.
 
 8) Conscience / Segurança da Ação
 - Objetivo: avaliar e bloquear ações perigosas, políticas de consentimento e limites por usuário.
-  - Status: Placeholder `core/conscience.py` com checagem simples por padrões proibidos.
-  - Falta: regras compreensivas, integração antes de executar comandos, logging e alertas.
+  - Status: Integrado ao `/api/execute` com bloqueio de padrões perigosos e retorno de motivo.
+  - Falta: regras mais abrangentes, policy por perfil, logging estruturado e alertas.
 
 9) Instalador & CLI
 - Objetivo: instalação automática baseada em hardware; CLI de controle do serviço.
-  - Status: Implementado — `scripts/installer.sh` (auto/advanced/dry-run) e `cli.sh` (start/stop/install/logs/status etc.).
-  - Falta: testes de instalação em múltiplas distros, integração com systemd/Docker, opções de rollback.
+  - Status: Implementado — `scripts/installer.sh` (auto/advanced/dry-run), `cli.sh` (start/stop/install/logs/status/fx-on/fx-off) e efeito visual desktop (`scripts/jarvis_fx.py`).
+  - Falta: testes de instalação em múltiplas distros e opções de rollback.
 
 10) Integrações externas
 - Objetivo: integração com calendar, e-mail, home automation (MQTT), sensores, APIs externas.
@@ -70,13 +70,13 @@ Detalhamento por área
 
 11) Observabilidade e Testes
 - Objetivo: logs estruturados, métricas (Prometheus), tracing, testes unitários/integrados e CI.
-  - Status: Logs básicos via `nohup` e arquivos; não há métricas ou testes.
-  - Falta: adicionar logging estruturado, métricas, testes automatizados e pipeline CI.
+  - Status: Logs básicos via `nohup`/arquivos e testes automatizados iniciais com `pytest` (health/login/execute).
+  - Falta: logging estruturado, métricas, tracing, ampliar cobertura e pipeline CI.
 
 12) Deploy e Operação
 - Objetivo: deployment robusto (Docker, systemd, orquestração), backups e recuperação.
-  - Status: Não implementado.
-  - Falta: `Dockerfile`, imagens, systemd unit files, documentação de deploy seguro.
+  - Status: Parcial — unit file `deploy/systemd/jarvis.service` + instruções em `INSTALL.md`.
+  - Falta: Dockerfile/imagens, NGINX+TLS, backup/restore e hardening operacional.
 
 Checklist resumida (checkboxes)
 
@@ -90,15 +90,19 @@ Checklist resumida (checkboxes)
 - [x] `scripts/test_socketio_client.py` — cliente de teste
 - [x] `README.md` e `INSTALL.md`
 - [x] Validação JWT no Socket.IO `connect` (token verificado, room `user:<username>`)
+- [x] `/api/execute` protegido por JWT + allowlist + policy (`conscience`)
+- [x] Efeito visual local de atividade (`./cli.sh fx-on` / `./cli.sh fx-off`)
+- [x] Testes automatizados iniciais com `pytest`
+- [x] Unidade `systemd` para backend (`deploy/systemd/jarvis.service`)
 - [x] Integração Ollama / Llama3 local (cliente HTTP implementado; ajuste conforme endpoint)
 - [ ] STT/TTS funcional (Vosk/Coqui/Whisper/Coqui TTS)
 - [ ] Persistência completa (PostgreSQL + migrations) — SQLAlchemy models implemented; fallback SQLite + bootstrap script added
 - [ ] Integração Redis (pub/sub, filas)
 - [ ] Segurança: HTTPS, CORS, rate limiting, secrets management
 - [ ] Role-based access, refresh tokens, user management
-- [ ] Sandboxing e policies antes de executar comandos (conscience)
+- [ ] Sandboxing avançado e policies por role antes de executar comandos
 - [ ] Tests unitários/integrados e CI
-- [ ] Dockerfile / systemd / deployment scripts
+- [ ] Dockerfile / deployment scripts adicionais
 - [ ] Observability: metrics, tracing, structured logs
 - [ ] Integrations: calendar, home automation, email, external APIs
 
@@ -108,6 +112,6 @@ Como proceder
   2. Reforçar segurança (refresh tokens, HTTPS, rate limiting).
   3. Implementar STT/TTS e integrar em `core/voice.py`.
   4. Expandir `conscience` para regras e auditoria antes da execução.
-  5. Criar Dockerfile / systemd unit para deploy.
+  5. Criar Dockerfile e pipeline CI para deploy contínuo.
 
 O arquivo `Checklist.md` foi atualizado com o estado atual. Quer que eu comece pela prioridade 1 (Alembic + Postgres) ou outra tarefa?

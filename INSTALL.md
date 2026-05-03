@@ -139,24 +139,54 @@ Exemplos:
 ./cli.sh stop
 ./cli.sh status
 ./cli.sh installer --advanced
+./cli.sh fx-on
+./cli.sh fx-off
 ```
 
-10) Produção (suggestions)
+10) Executar com systemd (produção)
+
+Arquivo de unidade pronto:
+- `deploy/systemd/jarvis.service`
+
+Instalação (Ubuntu):
+
+```bash
+# substituir <user> pelo usuário dono do projeto
+sudo cp deploy/systemd/jarvis.service /etc/systemd/system/jarvis@.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now jarvis@<user>
+```
+
+Comandos úteis:
+
+```bash
+sudo systemctl status jarvis@<user>
+sudo journalctl -u jarvis@<user> -f
+sudo systemctl restart jarvis@<user>
+```
+
+11) Produção (suggestions)
 
 - Use um processo manager (systemd, supervisor, pm2) para iniciar `uvicorn` com workers.
 - Configure HTTPS (NGINX reverse proxy, certificados Let's Encrypt).
 - Configure variáveis de ambiente seguras e rotacione `JARVIS_JWT_SECRET` regularmente.
 
-11) Segurança e considerações de privacidade
+12) Segurança e considerações de privacidade
 
 - O projeto emite comandos do sistema; seja cuidadoso com quem tem acesso ao servidor.
-- A `conscience` placeholder (`core/conscience.py`) deve ser estendida para bloquear ações perigosas.
-- Para produção, não use o armazenamento de usuários em memória; migre para PostgreSQL com senha forte.
+- O endpoint `/api/execute` exige JWT e valida comando por policy + allowlist.
+- Ajuste a allowlist via `JARVIS_ALLOWED_COMMANDS` (CSV), por exemplo:
 
-12) Próximos passos técnicos
+```env
+JARVIS_ALLOWED_COMMANDS=echo,pwd,ls,whoami,date,uptime
+```
+
+- Para produção, use PostgreSQL com credenciais fortes e rotação de segredos.
+
+13) Próximos passos técnicos
 
 - Integrar Ollama/Llama3 local em `core/ai.py` para IA offline.
 - Adicionar STT/TTS (Vosk, Coqui TTS) em `core/voice.py`.
-- Proteger Socket.IO no backend validando o JWT no evento `connect`.
+- Adicionar refresh tokens, rate limiting e trilha de auditoria completa por usuário.
 
 Se quiser, posso executar um `--dry-run` do `scripts/installer.sh` nesta máquina agora para mostrar as recomendações detectadas.

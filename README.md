@@ -60,6 +60,27 @@ npm run dev
 python3 scripts/test_socketio_client.py "echo hello && sleep 1 && echo done"
 ```
 
+Efeito visual local na máquina (desktop)
+
+Você pode ativar um efeito visual em janela flutuante que reage aos eventos do Jarvis (`executing`, `success`, `error`):
+
+```bash
+./cli.sh fx-on
+./cli.sh fx-off
+```
+
+Observações:
+- O backend deve estar rodando (`./cli.sh start`).
+- Por padrão usa login `admin/admin` para assinar eventos.
+- Para customizar credenciais/host:
+
+```bash
+export JARVIS_SERVER_URL=http://127.0.0.1:8000
+export JARVIS_FX_USER=admin
+export JARVIS_FX_PASSWORD=admin
+./cli.sh fx-on
+```
+
 Observações adicionais
 - O backend tentará usar `DATABASE_URL` (Postgres) se definido; caso contrário, o sistema faz fallback para um arquivo SQLite `jarvis.db` (útil para desenvolvimento).
 - O `core/ai.JarvisAI` tenta se comunicar com Ollama via HTTP (por padrão `http://localhost:11434`). Configure `OLLAMA_HOST` e `OLLAMA_MODEL` via variáveis de ambiente se necessário.
@@ -95,14 +116,15 @@ Autenticação e segurança
 
 Endpoints importantes
 - `GET /api/health` — health check
-- `POST /api/execute` — executar comando shell (body JSON {"command":"ls -la"}) — emite eventos Socket.IO: `executing`, `success`, `error`.
+- `POST /api/execute` — executar comando shell (body JSON `{"command":"ls -la"}`) com JWT obrigatório + allowlist/policy — emite eventos Socket.IO: `executing`, `success`, `error`.
 
 Práticas e próximos passos recomendados
-- Proteger o Socket.IO no backend validando o JWT no `connect`.
-- Substituir o armazenamento in-memory de usuários por PostgreSQL e implementar registro/gestão de usuários.
+- Expandir regras de segurança e auditoria de comandos (atualmente há policy básica + allowlist).
+- Evoluir gestão de usuários (refresh tokens, recuperação de senha, administração).
 - Integrar Ollama/Llama3 local em `core/ai.py` para processamento de prompts offline.
 - Implementar STT/TTS local (Vosk/Coqui) em `core/voice.py`.
-- Criar unit tests e CI, e adicionar instruções de deployment (systemd, Docker).
+- Expandir cobertura de testes e adicionar CI.
+- Consolidar deployment (Docker + hardening de systemd/NGINX).
 
 Para instruções completas de instalação e exemplos de configuração, veja `INSTALL.md`.
  

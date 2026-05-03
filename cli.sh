@@ -10,6 +10,7 @@ JARVIS_DIR="${JARVIS_DIR:-$SCRIPT_DIR}"
 RUNTIME_DIR="${RUNTIME_DIR:-$JARVIS_DIR/.runtime}"
 LOG_FILE="$RUNTIME_DIR/jarvis.log"
 PID_FILE="$RUNTIME_DIR/jarvis.pid"
+FX_PID_FILE="$RUNTIME_DIR/jarvis-fx.pid"
 PYTHON_BIN="${PYTHON_BIN:-$JARVIS_DIR/.venv/bin/python}"
 
 # Cores
@@ -33,6 +34,8 @@ show_menu() {
     echo "9) status      - Ver status dos processos"
     echo "10) voice-on   - Ativar módulo de voz (placeholder)"
     echo "11) voice-off  - Desativar módulo de voz (placeholder)"
+    echo "12) fx-on      - Ativar efeito visual desktop"
+    echo "13) fx-off     - Desativar efeito visual desktop"
     echo "q) sair"
     echo -n "Escolha uma opção: "
 }
@@ -107,9 +110,34 @@ voice_off() {
     echo "Desativando módulo de voz (placeholder)..."
 }
 
+fx_on() {
+    mkdir -p "$RUNTIME_DIR"
+    if [ -f "$FX_PID_FILE" ] && ps -p "$(cat "$FX_PID_FILE")" > /dev/null 2>&1; then
+        echo "Jarvis FX já está ativo (PID $(cat "$FX_PID_FILE"))."
+        return 0
+    fi
+    if [ ! -x "$PYTHON_BIN" ]; then
+        PYTHON_BIN="$(command -v python3)"
+    fi
+    nohup "$PYTHON_BIN" "$SCRIPT_DIR/scripts/jarvis_fx.py" > "$RUNTIME_DIR/jarvis-fx.log" 2>&1 &
+    echo $! > "$FX_PID_FILE"
+    echo "Jarvis FX iniciado com PID $(cat "$FX_PID_FILE")."
+}
+
+fx_off() {
+    if [ -f "$FX_PID_FILE" ]; then
+        PID=$(cat "$FX_PID_FILE")
+        echo -e "${RED}Parando Jarvis FX (PID $PID)...${RESET}"
+        kill "$PID" 2>/dev/null || true
+        rm -f "$FX_PID_FILE"
+    else
+        echo "Jarvis FX não parece estar rodando."
+    fi
+}
+
 print_help() {
     echo "Usage: $0 <command> [args]"
-    echo "Commands: start stop restart mic-toggle config installer install logs status voice-on voice-off help"
+    echo "Commands: start stop restart mic-toggle config installer install logs status voice-on voice-off fx-on fx-off help"
 }
 
 case "$1" in
@@ -124,6 +152,8 @@ case "$1" in
     status) status ;; 
     voice-on) voice_on ;; 
     voice-off) voice_off ;; 
+    fx-on) fx_on ;;
+    fx-off) fx_off ;;
     "" ) show_menu; read opt; case $opt in
             1) $0 start ;;
             2) $0 stop ;;
@@ -136,6 +166,8 @@ case "$1" in
             9) $0 status ;;
             10) $0 voice-on ;;
             11) $0 voice-off ;;
+            12) $0 fx-on ;;
+            13) $0 fx-off ;;
             q) exit ;;
         esac ;; 
     help|-h|--help) print_help ;; 
