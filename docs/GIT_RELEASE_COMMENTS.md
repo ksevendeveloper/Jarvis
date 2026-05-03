@@ -34,6 +34,14 @@ git commit -m "docs: finalize visual documentation pack and GitHub page"
 git push origin main
 ```
 
+## Atualização 5 — Site completo (guia, docs, funcionalidades, versões, downloads, autores)
+
+```bash
+git add docs/index.html
+git commit -m "docs(site): expand to full project website with guide, docs, features, changelog, downloads and authors"
+git push origin main
+```
+
 ## Ativação do GitHub Pages
 
 No GitHub:
@@ -42,4 +50,3 @@ No GitHub:
 3. Em `Build and deployment`, selecione `Deploy from a branch`.
 4. Escolha branch `main` e pasta `/docs`.
 5. Salve.
-

@@ -3,221 +3,316 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jarvis • Self-Hosted Assistant</title>
-  <meta name="description" content="Jarvis self-hosted: FastAPI + Socket.IO + segurança por policy + efeito visual desktop." />
+  <title>Jarvis • Site Oficial do Projeto</title>
+  <meta name="description" content="Site oficial do Jarvis: guia completo, documentação, funcionalidades, changelog, downloads, autores e roadmap." />
   <style>
     :root {
-      --bg-1: #06111e;
-      --bg-2: #0f2741;
-      --panel: rgba(9, 24, 40, 0.78);
-      --line: #35577b;
-      --text: #e8f4ff;
+      --bg-a: #06111e;
+      --bg-b: #0f2741;
+      --panel: rgba(10, 24, 39, 0.8);
+      --line: #345679;
+      --text: #eaf5ff;
       --muted: #9ec3e6;
-      --accent-a: #59c6ff;
-      --accent-b: #35dd7d;
-      --accent-c: #ffcc4d;
+      --cyan: #59c6ff;
+      --green: #35dd7d;
+      --amber: #ffcc4d;
       --danger: #ff5d73;
+      --ok: #5af3a4;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: "Segoe UI", "Trebuchet MS", system-ui, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 10% 10%, rgba(89, 198, 255, 0.22), transparent 34%),
-        radial-gradient(circle at 80% 20%, rgba(53, 221, 125, 0.15), transparent 30%),
-        linear-gradient(160deg, var(--bg-1), var(--bg-2));
+        radial-gradient(circle at 8% 8%, rgba(89, 198, 255, 0.2), transparent 32%),
+        radial-gradient(circle at 82% 18%, rgba(53, 221, 125, 0.14), transparent 30%),
+        linear-gradient(160deg, var(--bg-a), var(--bg-b));
       min-height: 100vh;
     }
-    .container {
-      width: min(1180px, 92vw);
-      margin: 0 auto;
-      padding: 26px 0 70px;
-    }
+    .container { width: min(1200px, 92vw); margin: 0 auto; padding: 20px 0 80px; }
     .topbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 18px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(4, 17, 30, 0.86);
+      backdrop-filter: blur(6px);
     }
-    .brand { font-size: 28px; font-weight: 800; letter-spacing: 0.02em; }
+    .brand { font-size: 24px; font-weight: 800; }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid transparent;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    .nav a:hover { border-color: var(--line); color: var(--text); }
+    .hero {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 28px;
+      background: var(--panel);
+      box-shadow: 0 14px 32px rgba(2, 12, 22, 0.42);
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(28px, 5vw, 46px); }
+    .hero p { margin: 0 0 18px; color: var(--muted); font-size: 18px; }
     .badges { display: flex; gap: 8px; flex-wrap: wrap; }
     .badge {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 999px;
       border: 1px solid var(--line);
       background: rgba(255,255,255,0.04);
       color: var(--muted);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      white-space: nowrap;
     }
-    .hero {
-      padding: 28px;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      box-shadow: 0 12px 30px rgba(2, 13, 24, 0.38);
-      margin-bottom: 20px;
-    }
-    .hero h1 { margin: 0 0 10px; font-size: clamp(26px, 4vw, 44px); }
-    .hero p { color: var(--muted); font-size: 18px; margin: 0 0 20px; }
-    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .cta { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
     .btn {
       display: inline-block;
-      border-radius: 12px;
-      padding: 11px 16px;
       text-decoration: none;
+      border-radius: 12px;
+      padding: 10px 14px;
       font-weight: 700;
-      border: 1px solid transparent;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
-      color: #06213a;
-    }
-    .btn-ghost {
-      color: var(--text);
-      border-color: var(--line);
-      background: rgba(255,255,255,0.03);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
+    .btn-main { background: linear-gradient(135deg, var(--cyan), var(--green)); color: #07233c; }
+    .btn-alt { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
+
+    .section {
       margin-top: 16px;
-    }
-    .card {
       border: 1px solid var(--line);
-      background: var(--panel);
       border-radius: 18px;
-      padding: 18px;
+      padding: 20px;
+      background: var(--panel);
     }
-    .card h2 { margin: 0 0 10px; font-size: 22px; }
-    .card p, .card li { color: var(--muted); line-height: 1.45; }
-    .span-6 { grid-column: span 6; }
-    .span-12 { grid-column: span 12; }
+    .section h2 { margin: 0 0 10px; font-size: 28px; }
+    .section p, .section li { color: var(--muted); line-height: 1.5; }
+
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+
+    .card {
+      border: 1px solid #2f4f72;
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.02);
+      height: 100%;
+    }
+    .card h3 { margin: 0 0 8px; }
+
     .code {
       border: 1px solid #2f4f72;
       border-radius: 12px;
       padding: 12px;
       background: #071626;
-      overflow-x: auto;
       color: #d8ecfb;
+      overflow-x: auto;
       font-family: Consolas, "Liberation Mono", Menlo, monospace;
       font-size: 14px;
+      white-space: pre;
     }
+
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td {
+      border-bottom: 1px solid #27435f;
+      padding: 10px 8px;
+      text-align: left;
+      color: var(--muted);
+      font-size: 14px;
+      vertical-align: top;
+    }
+    .table th { color: var(--text); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .state-ok { color: var(--ok); font-weight: 700; }
+    .state-wip { color: var(--amber); font-weight: 700; }
+    .state-risk { color: var(--danger); font-weight: 700; }
+
     .images {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .images img { width: 100%; border-radius: 12px; border: 1px solid #2f4f72; }
+
+    .authors {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
-    .images img {
-      width: 100%;
-      border-radius: 14px;
-      border: 1px solid #2f4f72;
-      background: #091626;
-    }
-    .timeline { display: grid; gap: 10px; }
-    .step {
-      border-left: 4px solid var(--accent-a);
-      padding: 8px 12px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 8px;
-    }
+
     footer {
-      margin-top: 20px;
-      color: #8cb3d4;
+      margin-top: 16px;
+      color: #89b2d7;
       font-size: 14px;
       text-align: center;
+      padding: 18px;
     }
-    @media (max-width: 920px) {
-      .span-6 { grid-column: span 12; }
+
+    @media (max-width: 980px) {
+      .col-4, .col-6, .col-8 { grid-column: span 12; }
       .images { grid-template-columns: 1fr; }
+      .authors { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <main class="container">
     <header class="topbar">
-      <div class="brand">Jarvis</div>
-      <div class="badges">
-        <span class="badge">FastAPI + Socket.IO</span>
-        <span class="badge">JWT + Policy + Allowlist</span>
-        <span class="badge">Desktop FX</span>
-        <span class="badge">Systemd Ready</span>
-      </div>
+      <div class="brand">Jarvis Project</div>
+      <nav class="nav">
+        <a href="#visao-geral">Visão Geral</a>
+        <a href="#guia">Guia</a>
+        <a href="#funcionalidades">Funcionalidades</a>
+        <a href="#docs">Documentação</a>
+        <a href="#versoes">Versionamento</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#autores">Autores</a>
+      </nav>
     </header>
 
-    <section class="hero">
-      <h1>Assistente Self-Hosted com Controle Seguro e Feedback Visual em Tempo Real</h1>
-      <p>Jarvis combina backend robusto, autenticação JWT, validação por policy e experiências visuais no web dashboard e na máquina local.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="../README.md">Ler README</a>
-        <a class="btn btn-ghost" href="../INSTALL.md">Guia de Instalação</a>
-        <a class="btn btn-ghost" href="../Checklist.md">Checklist Técnico</a>
+    <section class="hero" id="visao-geral">
+      <h1>Jarvis • Assistente Self-Hosted Seguro e Visual</h1>
+      <p>Projeto completo para automação local com FastAPI, Socket.IO, autenticação JWT, políticas de execução e feedback visual em tempo real na web e no desktop.</p>
+      <div class="badges">
+        <span class="badge">FastAPI + Socket.IO</span>
+        <span class="badge">JWT obrigatório em /api/execute</span>
+        <span class="badge">Conscience + Allowlist</span>
+        <span class="badge">Desktop FX</span>
+        <span class="badge">Systemd Ready</span>
+        <span class="badge">Pytest inicial</span>
+      </div>
+      <div class="cta">
+        <a class="btn btn-main" href="../README.md">Abrir README</a>
+        <a class="btn btn-alt" href="../INSTALL.md">Instalação Completa</a>
+        <a class="btn btn-alt" href="../Checklist.md">Checklist Técnico</a>
       </div>
     </section>
 
-    <section class="grid">
-      <article class="card span-6">
-        <h2>Highlights</h2>
-        <ul>
-          <li>Endpoint <code>/api/execute</code> com JWT obrigatório.</li>
-          <li>Bloqueio de padrões perigosos via <code>core/conscience.py</code>.</li>
-          <li>Allowlist de comandos via <code>JARVIS_ALLOWED_COMMANDS</code>.</li>
-          <li>Eventos Socket.IO para status de execução em tempo real.</li>
-          <li>Efeito visual local com <code>./cli.sh fx-on</code>.</li>
-        </ul>
-      </article>
-
-      <article class="card span-6">
-        <h2>Quick Start</h2>
-        <div class="code">python3 -m venv .venv
+    <section class="section" id="guia">
+      <h2>Guia Rápido</h2>
+      <div class="grid">
+        <article class="card col-6">
+          <h3>Setup</h3>
+          <div class="code">python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin
-./cli.sh start
-./cli.sh fx-on</div>
-      </article>
+PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin</div>
+        </article>
+        <article class="card col-6">
+          <h3>Execução</h3>
+          <div class="code">./cli.sh start
+./cli.sh status
+./cli.sh fx-on
+./cli.sh logs</div>
+        </article>
+      </div>
+    </section>
 
-      <article class="card span-12">
-        <h2>Diagramas Demonstrativos</h2>
-        <div class="images">
-          <img src="images/architecture.svg" alt="Arquitetura Jarvis" />
-          <img src="images/workflow.svg" alt="Workflow Jarvis" />
-          <img src="images/ui-mockup.svg" alt="Mockup UI Jarvis" />
-        </div>
-      </article>
+    <section class="section" id="funcionalidades">
+      <h2>Funcionalidades</h2>
+      <div class="grid">
+        <article class="card col-4">
+          <h3>Backend Seguro</h3>
+          <p>Endpoints REST e Socket.IO com autenticação JWT e validação de conexão por token.</p>
+        </article>
+        <article class="card col-4">
+          <h3>Execução Controlada</h3>
+          <p><code>/api/execute</code> protegido por JWT, policy de segurança e allowlist de comandos.</p>
+        </article>
+        <article class="card col-4">
+          <h3>Visual em Ação</h3>
+          <p>Efeito visual no dashboard web e orb desktop com <code>fx-on/fx-off</code>.</p>
+        </article>
+      </div>
+    </section>
 
-      <article class="card span-6">
-        <h2>Fluxo de Segurança</h2>
-        <div class="timeline">
-          <div class="step"><strong>1.</strong> Usuário autentica e recebe JWT.</div>
-          <div class="step"><strong>2.</strong> Socket.IO valida token no <code>connect</code>.</div>
-          <div class="step"><strong>3.</strong> <code>/api/execute</code> valida JWT + policy + allowlist.</div>
-          <div class="step"><strong>4.</strong> Backend executa e emite <code>executing/success/error</code>.</div>
-          <div class="step"><strong>5.</strong> Dashboard e orb desktop reagem em tempo real.</div>
-        </div>
-      </article>
+    <section class="section" id="docs">
+      <h2>Documentação e Diagramas</h2>
+      <div class="images">
+        <img src="images/architecture.svg" alt="Arquitetura Jarvis" />
+        <img src="images/workflow.svg" alt="Workflow Jarvis" />
+        <img src="images/ui-mockup.svg" alt="UI mockup Jarvis" />
+      </div>
+      <div class="grid" style="margin-top:12px;">
+        <article class="card col-4"><h3>README</h3><p>Visão geral e comandos principais.</p><p><a href="../README.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>INSTALL</h3><p>Instalação completa, systemd e ambiente.</p><p><a href="../INSTALL.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>Checklist</h3><p>Status real do projeto e próximos passos.</p><p><a href="../Checklist.md">Abrir</a></p></article>
+      </div>
+    </section>
 
-      <article class="card span-6">
-        <h2>Deploy no GitHub Pages</h2>
-        <p>Para publicar esta página:</p>
-        <div class="code"># na branch main
-git add docs/
-git commit -m "docs: add complete GitHub page with visual demos"
-git push origin main
+    <section class="section" id="versoes">
+      <h2>Versionamento e Changelog</h2>
+      <table class="table">
+        <thead>
+          <tr><th>Versão</th><th>Data</th><th>Status</th><th>Resumo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>v0.4.0</td><td>2026-05-03</td><td class="state-ok">Atual</td><td>Hardening em <code>/api/execute</code>, testes iniciais, systemd, desktop FX e docs visuais completas.</td></tr>
+          <tr><td>v0.3.0</td><td>2026-05-03</td><td class="state-ok">Estável</td><td>Autenticação JWT em login e Socket.IO, scaffolds backend/frontend e CLI funcional.</td></tr>
+          <tr><td>v0.2.0</td><td>2026-05-03</td><td class="state-wip">Histórico</td><td>Estrutura inicial, scripts e documentação base.</td></tr>
+          <tr><td>v0.5.0 (planejada)</td><td>TBD</td><td class="state-risk">Planejada</td><td>CI, Docker, melhorias de segurança (rate limiting/refresh tokens), expansão de testes.</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-# no GitHub
-# Settings -> Pages -> Build and deployment
-# Source: Deploy from a branch
-# Branch: main / folder: /docs</div>
-      </article>
+    <section class="section" id="downloads">
+      <h2>Downloads e Releases</h2>
+      <div class="grid">
+        <article class="card col-6">
+          <h3>Código-fonte</h3>
+          <p>Clone direto do repositório:</p>
+          <div class="code">git clone &lt;repo-url&gt; jarvis
+cd jarvis</div>
+        </article>
+        <article class="card col-6">
+          <h3>Pacote local (manual)</h3>
+          <p>Gerar tarball para distribuição interna:</p>
+          <div class="code">git archive --format=tar.gz --output jarvis-v0.4.0.tar.gz main</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="autores">
+      <h2>Autores e Contribuição</h2>
+      <div class="authors">
+        <article class="card">
+          <h3>Equipe Projeto Jarvis</h3>
+          <p>Mantenedores: equipe local de desenvolvimento e automação.</p>
+          <p>Contato: atualize este bloco com e-mails/links do time.</p>
+        </article>
+        <article class="card">
+          <h3>Como contribuir</h3>
+          <p>1. Crie branch feature.</p>
+          <p>2. Rode testes <code>pytest -q</code>.</p>
+          <p>3. Abra PR com descrição técnica e impacto.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <h2>Roadmap</h2>
+      <div class="grid">
+        <article class="card col-4"><h3>Segurança</h3><p>Rate limiting, refresh tokens, auditoria detalhada por usuário.</p></article>
+        <article class="card col-4"><h3>IA e Voz</h3><p>Integração Ollama completa e STT/TTS local funcional.</p></article>
+        <article class="card col-4"><h3>DevOps</h3><p>CI/CD, Docker, monitoramento e hardening de produção.</p></article>
+      </div>
     </section>
 
     <footer>
-      Jarvis • Self-Hosted Assistant • Atualizado para documentação de release visual.
+      Jarvis Project • Site completo de documentação e release • Última atualização: 2026-05-03.
     </footer>
   </main>
 </body>
