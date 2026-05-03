@@ -8,7 +8,6 @@ from db import engine, Base, SessionLocal
 from api import models as orm_models
 from api import auth as auth_module
 from api.routes import router as api_router
-from api import auth as auth_module
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 

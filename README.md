@@ -21,8 +21,7 @@ Arquivo importantes
 - [main.py](main.py) — aplicativo FastAPI + Socket.IO (ASGI).
 - [cli.sh](cli.sh) — CLI para iniciar/parar, instalar, logs, etc.
 - [scripts/installer.sh](scripts/installer.sh) — instalador inteligente (auto/advanced/dry-run).
-- [api/auth.py](api/auth.py) — endpoint `POST /api/auth/login` (JWT). Usuário padrão: `admin` / `admin` (in-memory).
- - [api/auth.py](api/auth.py) — endpoint `POST /api/auth/login` (JWT). Use `scripts/bootstrap_db.py` to create admin user (dev).
+- [api/auth.py](api/auth.py) — endpoint `POST /api/auth/login` (JWT). Use `scripts/bootstrap_db.py` para criar usuário admin (dev).
 
 Instalação e execução (resumo)
 

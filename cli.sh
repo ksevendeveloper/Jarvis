@@ -1,11 +1,16 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # CLI avançado para Jarvis
 # Uso: ./cli.sh [command] [options]
 
-JARVIS_DIR="$HOME/jarvis-system"
-LOG_FILE="$JARVIS_DIR/jarvis.log"
-PID_FILE="$JARVIS_DIR/jarvis.pid"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+JARVIS_DIR="${JARVIS_DIR:-$SCRIPT_DIR}"
+RUNTIME_DIR="${RUNTIME_DIR:-$JARVIS_DIR/.runtime}"
+LOG_FILE="$RUNTIME_DIR/jarvis.log"
+PID_FILE="$RUNTIME_DIR/jarvis.pid"
+PYTHON_BIN="${PYTHON_BIN:-$JARVIS_DIR/.venv/bin/python}"
 
 # Cores
 CYAN='\033[0;36m'
@@ -34,11 +39,18 @@ show_menu() {
 
 start() {
     echo -e "${GREEN}Iniciando Jarvis...${RESET}"
-    mkdir -p "$JARVIS_DIR"
+    mkdir -p "$RUNTIME_DIR"
     cd "$JARVIS_DIR" || return 1
-    nohup python3 main.py > "$LOG_FILE" 2>&1 &
+    if [ -f "$PID_FILE" ] && ps -p "$(cat "$PID_FILE")" > /dev/null 2>&1; then
+        echo "Jarvis já está rodando (PID $(cat "$PID_FILE"))."
+        return 0
+    fi
+    if [ ! -x "$PYTHON_BIN" ]; then
+        PYTHON_BIN="$(command -v python3)"
+    fi
+    nohup "$PYTHON_BIN" main.py > "$LOG_FILE" 2>&1 &
     echo $! > "$PID_FILE"
-    echo "PID $(cat $PID_FILE)" > "$LOG_FILE"
+    echo "Jarvis iniciado com PID $(cat "$PID_FILE"). Logs em $LOG_FILE"
 }
 
 stop() {
@@ -75,13 +87,15 @@ mic_toggle() {
 }
 
 show_logs() {
+    mkdir -p "$RUNTIME_DIR"
+    touch "$LOG_FILE"
     tail -f "$LOG_FILE"
 }
 
 install_component() {
     comp="$1"
     echo -e "${YELLOW}Instalando componente: $comp${RESET}"
-    scripts/installer.sh --install "$comp"
+    "$SCRIPT_DIR/scripts/installer.sh" --install "$comp"
 }
 
 voice_on() {
@@ -102,9 +116,9 @@ case "$1" in
     start) start ;; 
     stop) stop ;; 
     restart) stop; start ;; 
-    mic-toggle|mic-toggle) mic_toggle ;; 
-    config) ${EDITOR:-nano} "$JARVIS_DIR/config.json" ;; 
-    installer) scripts/installer.sh ${@:2} ;; 
+    mic-toggle) mic_toggle ;; 
+    config) mkdir -p "$RUNTIME_DIR"; touch "$RUNTIME_DIR/config.json"; ${EDITOR:-nano} "$RUNTIME_DIR/config.json" ;; 
+    installer) "$SCRIPT_DIR/scripts/installer.sh" "${@:2}" ;; 
     install) shift; install_component "$*" ;; 
     logs) show_logs ;; 
     status) status ;; 
