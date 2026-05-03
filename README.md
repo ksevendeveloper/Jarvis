@@ -18,6 +18,7 @@ Arquivo importantes
 - [cli.sh](cli.sh) — CLI para iniciar/parar, instalar, logs, etc.
 - [scripts/installer.sh](scripts/installer.sh) — instalador inteligente (auto/advanced/dry-run).
 - [api/auth.py](api/auth.py) — endpoint `POST /api/auth/login` (JWT). Usuário padrão: `admin` / `admin` (in-memory).
+ - [api/auth.py](api/auth.py) — endpoint `POST /api/auth/login` (JWT). Use `scripts/bootstrap_db.py` to create admin user (dev).
 
 Instalação e execução (resumo)
 
@@ -27,6 +28,13 @@ Instalação e execução (resumo)
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+Crie o usuário admin (modo dev) após instalar dependências:
+
+```bash
+# dentro do venv
+PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin
 ```
 
 2) Executar backend em desenvolvimento:
@@ -48,6 +56,10 @@ npm run dev
 ```bash
 python3 scripts/test_socketio_client.py "echo hello && sleep 1 && echo done"
 ```
+
+Observações adicionais
+- O backend tentará usar `DATABASE_URL` (Postgres) se definido; caso contrário, o sistema faz fallback para um arquivo SQLite `jarvis.db` (útil para desenvolvimento).
+- O `core/ai.JarvisAI` tenta se comunicar com Ollama via HTTP (por padrão `http://localhost:11434`). Configure `OLLAMA_HOST` e `OLLAMA_MODEL` via variáveis de ambiente se necessário.
 
 Instalador inteligente
 

@@ -11,5 +11,14 @@ npm install
 npm run dev
 ```
 
-Abra http://localhost:3000/login para entrar (usuário inicial: `admin` / senha `admin`).
+Abra http://localhost:3000/login para entrar (usuário inicial: `admin` / senha `admin` se criado via bootstrap).
+
+Notas:
+- O frontend salva o JWT em `localStorage` como `jarvis_token` e envia o token ao conectar ao Socket.IO usando `auth: { token }`.
+- Para desenvolvimento crie o usuário admin com:
+
+```bash
+# dentro do .venv
+PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin
+```
 

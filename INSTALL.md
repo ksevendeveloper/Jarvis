@@ -25,6 +25,8 @@ pip install -U pip
 pip install -r requirements.txt
 ```
 
+Nota: se você não tiver PostgreSQL disponível durante o desenvolvimento, o backend usará um fallback SQLite (`jarvis.db`). Em produção, configure `DATABASE_URL` para seu PostgreSQL.
+
 3) Variáveis de ambiente recomendadas
 
 Crie um arquivo `.env` na raiz ou exporte variáveis no shell. Exemplo mínimo:
@@ -72,6 +74,33 @@ bash scripts/installer.sh --auto --dry-run
 ```
 
 7) Banco de dados e cache (PostgreSQL / Redis) — mínimo rápido
+
+--
+
+Inicializar banco e criar usuário admin (desenvolvimento)
+
+Após instalar dependências e antes de rodar o backend, crie as tabelas e um usuário `admin` (modo dev):
+
+```bash
+# dentro do .venv
+PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin
+```
+
+O script usará `DATABASE_URL` (Postgres) se configurado; caso contrário criará `jarvis.db` (SQLite) na raiz do projeto.
+
+Verificar Ollama (opcional)
+
+Se você pretende usar IA local, confirme que o Ollama está escutando (porta padrão 11434):
+
+```bash
+python3 - <<'PY'
+import socket
+try:
+	s=socket.socket(); s.settimeout(1); s.connect(('localhost',11434)); print('Ollama reachable')
+except Exception:
+	print('Ollama unreachable')
+PY
+```
 
 Instalar PostgreSQL e criar database/usuário (exemplo):
 

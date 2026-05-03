@@ -7,3 +7,5 @@ redis
 aiofiles
 python-jose[cryptography]
 passlib[bcrypt]
+sqlalchemy
+httpx

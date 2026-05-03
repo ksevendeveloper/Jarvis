@@ -75,14 +75,14 @@ Checklist resumida (checkboxes)
 - [x] `scripts/installer.sh` — instalador inteligente (auto/advanced/dry-run)
 - [x] `cli.sh` — CLI refatorado (start/stop/install/logs/status)
 - [x] Scaffold web Next.js com login JWT e dashboard básico
-- [x] Auth endpoint `POST /api/auth/login` (JWT) — in-memory user
+- [x] Auth endpoint `POST /api/auth/login` (JWT) — DB-backed via SQLAlchemy
 - [x] Placeholders `core/voice.py` e `core/conscience.py`
 - [x] `scripts/test_socketio_client.py` — cliente de teste
 - [x] `README.md` e `INSTALL.md`
-- [ ] Validação JWT no Socket.IO `connect`
-- [ ] Integração Ollama / Llama3 local
+- [x] Validação JWT no Socket.IO `connect` (token verificado, room `user:<username>`)
+- [x] Integração Ollama / Llama3 local (cliente HTTP implementado; ajuste conforme endpoint)
 - [ ] STT/TTS funcional (Vosk/Coqui/Whisper/Coqui TTS)
-- [ ] Persistência completa (PostgreSQL + migrations)
+- [ ] Persistência completa (PostgreSQL + migrations) — SQLAlchemy models implemented; fallback SQLite + bootstrap script added
 - [ ] Integração Redis (pub/sub, filas)
 - [ ] Segurança: HTTPS, CORS, rate limiting, secrets management
 - [ ] Role-based access, refresh tokens, user management
@@ -94,10 +94,10 @@ Checklist resumida (checkboxes)
 
 Como proceder
 - Prioridade inicial sugerida:
-  1. Validar JWT no Socket.IO `connect` e proteger eventos.
-  2. Migrar store de usuários para PostgreSQL e adicionar migrations.
-  3. Integrar `conscience` para bloquear comandos perigosos antes da execução.
-  4. Implementar integração básica com Ollama (modo experimental) e pipeline de prompts.
-  5. Adicionar STT/TTS local em `core/voice.py`.
+  1. Migrar store para PostgreSQL e adicionar migrations (Alembic).
+  2. Reforçar segurança (refresh tokens, HTTPS, rate limiting).
+  3. Implementar STT/TTS e integrar em `core/voice.py`.
+  4. Expandir `conscience` para regras e auditoria antes da execução.
+  5. Criar Dockerfile / systemd unit para deploy.
 
-O arquivo `Checklist.md` foi criado na raiz do projeto. Quer que eu implemente o item de maior prioridade agora (por exemplo, validar JWT no Socket.IO `connect`)?
+O arquivo `Checklist.md` foi atualizado com o estado atual. Quer que eu comece pela prioridade 1 (Alembic + Postgres) ou outra tarefa?
