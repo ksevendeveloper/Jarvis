@@ -1,9 +1,27 @@
 # Jarvis — Assistente Pessoal Self-Hosted
 
-Backend minimal com FastAPI + Socket.IO (ASGI). Estrutura inicial para orquestrar IA local, comandos do sistema e um painel web.
+Jarvis é um assistente self-hosted projetado para rodar localmente em Ubuntu. Este repositório fornece:
 
+- Backend em `FastAPI` com Socket.IO (ASGI) — orquestra ações do sistema e emite eventos em tempo real.
+- Scaffold frontend em `web/` (Next.js) com autenticação JWT e cliente Socket.IO.
+- Scripts de sistema em `scripts/` (instalador inteligente, utilitários, testes).
+- Módulos core em `core/` para IA, voz e políticas (placeholders para integração futura).
 
-Instalação rápida (virtualenv):
+Arquitetura resumida
+- `core/` — lógica do assistente, integração com IA local (Ollama/Llama3), `voice.py`, `conscience.py`.
+- `api/` — rotas REST e auth (`/api/auth/login`).
+- `web/` — frontend Next.js (login, painel com eventos Socket.IO).
+- `scripts/` — `installer.sh`, `run_command.sh`, `test_socketio_client.py`, entre outros.
+
+Arquivo importantes
+- [main.py](main.py) — aplicativo FastAPI + Socket.IO (ASGI).
+- [cli.sh](cli.sh) — CLI para iniciar/parar, instalar, logs, etc.
+- [scripts/installer.sh](scripts/installer.sh) — instalador inteligente (auto/advanced/dry-run).
+- [api/auth.py](api/auth.py) — endpoint `POST /api/auth/login` (JWT). Usuário padrão: `admin` / `admin` (in-memory).
+
+Instalação e execução (resumo)
+
+1) Dependências Python (virtualenv):
 
 ```bash
 python3 -m venv .venv
@@ -11,15 +29,29 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Executar em modo desenvolvimento:
+2) Executar backend em desenvolvimento:
 
 ```bash
 uvicorn main:asgi_app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Instalador inteligente:
+3) Frontend (Next.js) — pasta `web/`:
 
-O projeto inclui `scripts/installer.sh` que detecta CPU, RAM, disco e GPU e recomenda um plano de instalação.
+```bash
+cd web
+npm install
+npm run dev
+```
+
+4) Teste de integração simples (cliente de teste Socket.IO):
+
+```bash
+python3 scripts/test_socketio_client.py "echo hello && sleep 1 && echo done"
+```
+
+Instalador inteligente
+
+Use `scripts/installer.sh` para detectar recursos do sistema e instalar componentes recomendados.
 
 Exemplos:
 
@@ -36,36 +68,26 @@ bash scripts/installer.sh --auto
 # Instalar um componente específico
 bash scripts/installer.sh --install redis
 
-# Rodar em dry-run para ver os comandos sem executar
+# Dry-run (não executa comandos)
 bash scripts/installer.sh --auto --dry-run
 ```
 
-CLI do sistema:
+Autenticação e segurança
 
-O `cli.sh` foi refatorado para aceitar comandos e opções completas. Exemplos:
+- Endpoint de login: `POST /api/auth/login` (JSON: `{ "username":"...", "password":"..." }`). Retorna JWT.
+- O scaffold frontend salva o token no `localStorage` como `jarvis_token` e o utiliza para conectar ao Socket.IO.
+- Configure a variável de ambiente `JARVIS_JWT_SECRET` para um valor forte antes de colocar em produção.
 
-```bash
-./cli.sh start
-./cli.sh stop
-./cli.sh installer --advanced
-./cli.sh install postgres
-./cli.sh logs
-```
-
-Voz e "conscience":
-
-Adicionados placeholders em `core/voice.py` e `core/conscience.py` para futuras integrações de STT/TTS e políticas de segurança.
-
-
-Endpoints importantes:
+Endpoints importantes
 - `GET /api/health` — health check
-- `POST /api/execute` — executar comando shell (body JSON {"command":"ls -la"})
+- `POST /api/execute` — executar comando shell (body JSON {"command":"ls -la"}) — emite eventos Socket.IO: `executing`, `success`, `error`.
 
-Socket.IO:
-- Conectar ao endpoint Socket.IO do servidor (ponto ASGI montado automaticamente). Eventos emitidos: `status`, `executing`, `success`, `error`.
+Práticas e próximos passos recomendados
+- Proteger o Socket.IO no backend validando o JWT no `connect`.
+- Substituir o armazenamento in-memory de usuários por PostgreSQL e implementar registro/gestão de usuários.
+- Integrar Ollama/Llama3 local em `core/ai.py` para processamento de prompts offline.
+- Implementar STT/TTS local (Vosk/Coqui) em `core/voice.py`.
+- Criar unit tests e CI, e adicionar instruções de deployment (systemd, Docker).
 
-Próximos passos sugeridos:
-- Scaffold frontend React/Next.js em `web/`
-- Integrar Ollama / Llama3 em `core/ai.py`
-- Adicionar integração com PostgreSQL e Redis
+Para instruções completas de instalação e exemplos de configuração, veja `INSTALL.md`.
  
