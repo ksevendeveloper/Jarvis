@@ -9,3 +9,6 @@ build/
 .idea/
 node_modules/
 .runtime/
+
+AGENTS.md
+.agent.md
