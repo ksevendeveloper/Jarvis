@@ -27,5 +27,4 @@ Próximos passos sugeridos:
 - Scaffold frontend React/Next.js em `web/`
 - Integrar Ollama / Llama3 em `core/ai.py`
 - Adicionar integração com PostgreSQL e Redis
-# Jarviss
  
