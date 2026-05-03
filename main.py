@@ -5,6 +5,7 @@ from typing import Dict
 import socketio
 from fastapi import FastAPI, BackgroundTasks
 from api.routes import router as api_router
+from api import auth as auth_module
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -23,6 +24,7 @@ app.add_middleware(
 
 # include example API routes
 app.include_router(api_router, prefix="/api")
+app.include_router(auth_module.router, prefix="/api")
 
 
 class ExecuteRequest(BaseModel):

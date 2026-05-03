@@ -5,3 +5,5 @@ python-dotenv
 psycopg2-binary
 redis
 aiofiles
+python-jose[cryptography]
+passlib[bcrypt]
