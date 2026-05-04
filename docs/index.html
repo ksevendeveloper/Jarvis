@@ -5,181 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jarvis • Site Oficial do Projeto</title>
   <meta name="description" content="Site oficial do Jarvis: guia completo, documentação, funcionalidades, changelog, kseven, downloads, autores e roadmap." />
-  <style>
-    :root {
-      --bg-a: #06111e;
-      --bg-b: #0f2741;
-      --panel: rgba(10, 24, 39, 0.8);
-      --line: #345679;
-      --text: #eaf5ff;
-      --muted: #9ec3e6;
-      --cyan: #59c6ff;
-      --green: #35dd7d;
-      --amber: #ffcc4d;
-      --danger: #ff5d73;
-      --ok: #5af3a4;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", "Trebuchet MS", system-ui, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 8% 8%, rgba(89, 198, 255, 0.2), transparent 32%),
-        radial-gradient(circle at 82% 18%, rgba(53, 221, 125, 0.14), transparent 30%),
-        linear-gradient(160deg, var(--bg-a), var(--bg-b));
-      min-height: 100vh;
-    }
-    .container { width: min(1200px, 96vw); margin: 0 auto; padding: 14px 0 80px; }
-    .topbar {
-      position: sticky;
-      top: 8px;
-      z-index: 50;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(4, 17, 30, 0.86);
-      backdrop-filter: blur(6px);
-    }
-    .brand { font-size: 24px; font-weight: 800; }
-    .nav { display: flex; gap: 10px; flex-wrap: wrap; align-items:center }
-    .nav a {
-      color: var(--muted);
-      text-decoration: none;
-      border: 1px solid transparent;
-      padding: 6px 10px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-    .nav a:hover { border-color: var(--line); color: var(--text); }
-    .hero {
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 28px;
-      background: var(--panel);
-      box-shadow: 0 14px 32px rgba(2, 12, 22, 0.42);
-    }
-    .hero h1 { margin: 0 0 10px; font-size: clamp(28px, 5vw, 46px); }
-    .hero p { margin: 0 0 18px; color: var(--muted); font-size: 18px; }
-    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
-    .badge {
-      font-size: 13px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-    }
-    .cta { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn {
-      display: inline-block;
-      text-decoration: none;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 700;
-    }
-    .btn-main { background: linear-gradient(135deg, var(--cyan), var(--green)); color: #07233c; }
-    .btn-alt { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
-
-    .section {
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 20px;
-      background: var(--panel);
-    }
-    .section h2 { margin: 0 0 10px; font-size: 28px; }
-    .section p, .section li { color: var(--muted); line-height: 1.5; }
-
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
-    .col-4 { grid-column: span 4; }
-    .col-6 { grid-column: span 6; }
-    .col-8 { grid-column: span 8; }
-    .col-12 { grid-column: span 12; }
-
-    /* fluid cards for smaller screens */
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(6, 1fr); }
-      .col-4 { grid-column: span 6; }
-      .col-6 { grid-column: span 6; }
-      .col-8 { grid-column: span 6; }
-    }
-
-    .card {
-      border: 1px solid #2f4f72;
-      border-radius: 14px;
-      padding: 14px;
-      background: rgba(255,255,255,0.02);
-      height: 100%;
-    }
-    .card h3 { margin: 0 0 8px; }
-
-    .code {
-      border: 1px solid #2f4f72;
-      border-radius: 12px;
-      padding: 12px;
-      background: #071626;
-      color: #d8ecfb;
-      overflow-x: auto;
-      font-family: Consolas, "Liberation Mono", Menlo, monospace;
-      font-size: 14px;
-      white-space: pre;
-    }
-
-    .table { width: 100%; border-collapse: collapse; }
-    .table th, .table td {
-      border-bottom: 1px solid #27435f;
-      padding: 10px 8px;
-      text-align: left;
-      color: var(--muted);
-      font-size: 14px;
-      vertical-align: top;
-    }
-    .table th { color: var(--text); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
-
-    .state-ok { color: var(--ok); font-weight: 700; }
-    .state-wip { color: var(--amber); font-weight: 700; }
-    .state-risk { color: var(--danger); font-weight: 700; }
-
-    .images {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .images img { width: 100%; height: auto; border-radius: 12px; border: 1px solid #2f4f72; }
-
-    .authors {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    footer {
-      margin-top: 16px;
-      color: #89b2d7;
-      font-size: 14px;
-      text-align: center;
-      padding: 18px;
-    }
-
-    @media (max-width: 980px) {
-      .col-4, .col-6, .col-8 { grid-column: span 12; }
-      .images { grid-template-columns: 1fr; }
-      .authors { grid-template-columns: 1fr; }
-    }
-    /* small screens: tighten spacing */
-    @media (max-width: 520px) {
-      body { font-size: 14px; }
-      .topbar { padding: 8px; }
-      .hero { padding: 18px; }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
   <main class="container">
@@ -211,9 +37,9 @@
         <span class="badge">Pytest inicial</span>
       </div>
       <div class="cta">
-        <a class="btn btn-main" href="docs/README.md">Abrir README</a>
-        <a class="btn btn-alt" href="docs/INSTALL.md">Instalação Completa</a>
-        <a class="btn btn-alt" href="docs/Checklist.md">Checklist Técnico</a>
+        <a class="btn btn-main" href="readme.html">Abrir README</a>
+        <a class="btn btn-alt" href="install.html">Instalação Completa</a>
+        <a class="btn btn-alt" href="checklist.html">Checklist Técnico</a>
       </div>
     </section>
 
@@ -263,9 +89,9 @@ PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin</div>
         <img src="images/ui-mockup.svg" alt="UI mockup Jarvis" />
       </div>
       <div class="grid" style="margin-top:12px;">
-        <article class="card col-4"><h3>README</h3><p>Visão geral e comandos principais.</p><p><a href="docs/README.md">Abrir</a></p></article>
-        <article class="card col-4"><h3>INSTALL</h3><p>Instalação completa, systemd e ambiente.</p><p><a href="docs/INSTALL.md">Abrir</a></p></article>
-        <article class="card col-4"><h3>Checklist</h3><p>Status real do projeto e próximos passos.</p><p><a href="docs/Checklist.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>README</h3><p>Visão geral e comandos principais.</p><p><a href="readme.html">Abrir</a></p></article>
+        <article class="card col-4"><h3>INSTALL</h3><p>Instalação completa, systemd e ambiente.</p><p><a href="install.html">Abrir</a></p></article>
+        <article class="card col-4"><h3>Checklist</h3><p>Status real do projeto e próximos passos.</p><p><a href="checklist.html">Abrir</a></p></article>
       </div>
     </section>
 
@@ -331,29 +157,6 @@ cd jarvis</div>
       Jarvis • Site completo de documentação e release • Última atualização: 2026-05-03.
     </footer>
   </main>
-  <script>
-    (function(){
-      var mq = window.matchMedia('(max-width:720px)');
-      var menu = document.getElementById('menuItems');
-      var toggle = document.getElementById('menuToggle');
-      function update(){
-        if(mq.matches){
-          toggle.style.display='inline-block';
-          menu.style.display='none';
-          toggle.setAttribute('aria-expanded','false');
-        } else {
-          toggle.style.display='none';
-          menu.style.display='flex';
-        }
-      }
-      toggle.addEventListener('click', function(){
-        var shown = menu.style.display === 'block';
-        menu.style.display = shown ? 'none' : 'block';
-        toggle.setAttribute('aria-expanded', String(!shown));
-      });
-      mq.addListener(update);
-      update();
-    })();
-  </script>
+  <script src="assets/scripts.js"></script>
 </body>
 </html>
