@@ -31,24 +31,23 @@
         linear-gradient(160deg, var(--bg-a), var(--bg-b));
       min-height: 100vh;
     }
-    .container { width: min(1200px, 92vw); margin: 0 auto; padding: 20px 0 80px; }
+    .container { width: min(1200px, 96vw); margin: 0 auto; padding: 14px 0 80px; }
     .topbar {
       position: sticky;
-      top: 10px;
-      z-index: 20;
+      top: 8px;
+      z-index: 50;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
       padding: 10px 14px;
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 12px;
       background: rgba(4, 17, 30, 0.86);
       backdrop-filter: blur(6px);
     }
     .brand { font-size: 24px; font-weight: 800; }
-    .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; align-items:center }
     .nav a {
       color: var(--muted);
       text-decoration: none;
@@ -104,6 +103,14 @@
     .col-8 { grid-column: span 8; }
     .col-12 { grid-column: span 12; }
 
+    /* fluid cards for smaller screens */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(6, 1fr); }
+      .col-4 { grid-column: span 6; }
+      .col-6 { grid-column: span 6; }
+      .col-8 { grid-column: span 6; }
+    }
+
     .card {
       border: 1px solid #2f4f72;
       border-radius: 14px;
@@ -145,7 +152,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
-    .images img { width: 100%; border-radius: 12px; border: 1px solid #2f4f72; }
+    .images img { width: 100%; height: auto; border-radius: 12px; border: 1px solid #2f4f72; }
 
     .authors {
       display: grid;
@@ -166,20 +173,29 @@
       .images { grid-template-columns: 1fr; }
       .authors { grid-template-columns: 1fr; }
     }
+    /* small screens: tighten spacing */
+    @media (max-width: 520px) {
+      body { font-size: 14px; }
+      .topbar { padding: 8px; }
+      .hero { padding: 18px; }
+    }
   </style>
 </head>
 <body>
   <main class="container">
     <header class="topbar">
       <div class="brand">Jarvis</div>
-      <nav class="nav">
-        <a href="#visao-geral">Visão Geral</a>
-        <a href="#guia">Guia</a>
-        <a href="#funcionalidades">Funcionalidades</a>
-        <a href="#docs">Documentação</a>
-        <a href="#versoes">Versionamento</a>
-        <a href="#downloads">Downloads</a>
-        <a href="#autores">Autores</a>
+      <nav class="nav" id="mainNav">
+        <button id="menuToggle" aria-expanded="false" style="background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 10px;border-radius:8px;display:none">Menu</button>
+        <div id="menuItems">
+          <a href="#visao-geral">Visão Geral</a>
+          <a href="#guia">Guia</a>
+          <a href="#funcionalidades">Funcionalidades</a>
+          <a href="#docs">Documentação</a>
+          <a href="#versoes">Versionamento</a>
+          <a href="#downloads">Downloads</a>
+          <a href="#autores">Autores</a>
+        </div>
       </nav>
     </header>
 
@@ -195,9 +211,9 @@
         <span class="badge">Pytest inicial</span>
       </div>
       <div class="cta">
-        <a class="btn btn-main" href="../README.md">Abrir README</a>
-        <a class="btn btn-alt" href="../INSTALL.md">Instalação Completa</a>
-        <a class="btn btn-alt" href="../Checklist.md">Checklist Técnico</a>
+        <a class="btn btn-main" href="docs/README.md">Abrir README</a>
+        <a class="btn btn-alt" href="docs/INSTALL.md">Instalação Completa</a>
+        <a class="btn btn-alt" href="docs/Checklist.md">Checklist Técnico</a>
       </div>
     </section>
 
@@ -247,9 +263,9 @@ PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin</div>
         <img src="images/ui-mockup.svg" alt="UI mockup Jarvis" />
       </div>
       <div class="grid" style="margin-top:12px;">
-        <article class="card col-4"><h3>README</h3><p>Visão geral e comandos principais.</p><p><a href="../README.md">Abrir</a></p></article>
-        <article class="card col-4"><h3>INSTALL</h3><p>Instalação completa, systemd e ambiente.</p><p><a href="../INSTALL.md">Abrir</a></p></article>
-        <article class="card col-4"><h3>Checklist</h3><p>Status real do projeto e próximos passos.</p><p><a href="../Checklist.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>README</h3><p>Visão geral e comandos principais.</p><p><a href="docs/README.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>INSTALL</h3><p>Instalação completa, systemd e ambiente.</p><p><a href="docs/INSTALL.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>Checklist</h3><p>Status real do projeto e próximos passos.</p><p><a href="docs/Checklist.md">Abrir</a></p></article>
       </div>
     </section>
 
@@ -315,5 +331,29 @@ cd jarvis</div>
       Jarvis • Site completo de documentação e release • Última atualização: 2026-05-03.
     </footer>
   </main>
+  <script>
+    (function(){
+      var mq = window.matchMedia('(max-width:720px)');
+      var menu = document.getElementById('menuItems');
+      var toggle = document.getElementById('menuToggle');
+      function update(){
+        if(mq.matches){
+          toggle.style.display='inline-block';
+          menu.style.display='none';
+          toggle.setAttribute('aria-expanded','false');
+        } else {
+          toggle.style.display='none';
+          menu.style.display='flex';
+        }
+      }
+      toggle.addEventListener('click', function(){
+        var shown = menu.style.display === 'block';
+        menu.style.display = shown ? 'none' : 'block';
+        toggle.setAttribute('aria-expanded', String(!shown));
+      });
+      mq.addListener(update);
+      update();
+    })();
+  </script>
 </body>
 </html>
