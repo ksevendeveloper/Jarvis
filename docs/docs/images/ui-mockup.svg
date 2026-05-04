@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="860" viewBox="0 0 1360 860" role="img" aria-labelledby="title desc">
+  <title id="title">Mockup UI Jarvis</title>
+  <desc id="desc">Mockup de interface com painel, feed de eventos e estado visual do Jarvis.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#07121f"/>
+      <stop offset="100%" stop-color="#0f2a45"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="0" x2="1">
+      <stop offset="0%" stop-color="#59c6ff"/>
+      <stop offset="100%" stop-color="#35dd7d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1360" height="860" fill="url(#bg)"/>
+  <rect x="40" y="40" width="1280" height="780" rx="24" fill="rgba(255,255,255,0.06)" stroke="#35577b"/>
+
+  <text x="90" y="110" fill="#eaf5ff" font-family="Verdana" font-size="34" font-weight="700">Jarvis Command Center</text>
+  <text x="90" y="145" fill="#9ec3e6" font-family="Verdana" font-size="18">Socket conectado • usuário admin • ambiente local</text>
+
+  <rect x="90" y="190" width="780" height="520" rx="18" fill="#0f2236" stroke="#3c6389"/>
+  <text x="120" y="240" fill="#dff0ff" font-family="Verdana" font-size="24" font-weight="700">Feed de Eventos</text>
+
+  <rect x="120" y="270" width="720" height="80" rx="12" fill="#17344f"/>
+  <text x="145" y="305" fill="#a8d0ef" font-family="Verdana" font-size="16">executing  •  sudo systemctl restart nginx</text>
+  <text x="145" y="330" fill="#7fb7df" font-family="Verdana" font-size="14">10:32:17 • room user:admin</text>
+
+  <rect x="120" y="365" width="720" height="80" rx="12" fill="#17344f"/>
+  <text x="145" y="400" fill="#a8d0ef" font-family="Verdana" font-size="16">success  •  service nginx restarted</text>
+  <text x="145" y="425" fill="#7fb7df" font-family="Verdana" font-size="14">10:32:18 • returncode 0</text>
+
+  <rect x="120" y="460" width="720" height="80" rx="12" fill="#17344f"/>
+  <text x="145" y="495" fill="#a8d0ef" font-family="Verdana" font-size="16">status  •  connected</text>
+  <text x="145" y="520" fill="#7fb7df" font-family="Verdana" font-size="14">10:32:20 • socket sid #12913</text>
+
+  <rect x="120" y="575" width="560" height="90" rx="12" fill="#0c1c2d" stroke="#2f4f72"/>
+  <text x="145" y="628" fill="#7fb7df" font-family="Verdana" font-size="16">Digite um comando permitido...</text>
+
+  <rect x="700" y="575" width="140" height="90" rx="12" fill="url(#cta)"/>
+  <text x="732" y="628" fill="#08304a" font-family="Verdana" font-size="20" font-weight="700">Enviar</text>
+
+  <rect x="910" y="190" width="360" height="260" rx="18" fill="#0f2236" stroke="#3c6389"/>
+  <text x="940" y="240" fill="#dff0ff" font-family="Verdana" font-size="24" font-weight="700">Jarvis Status</text>
+  <circle cx="1088" cy="332" r="62" fill="#ffcc4d"/>
+  <circle cx="1088" cy="332" r="92" fill="none" stroke="#ffcc4d" stroke-opacity="0.55" stroke-width="5"/>
+  <circle cx="1088" cy="332" r="118" fill="none" stroke="#ffcc4d" stroke-opacity="0.3" stroke-width="4"/>
+  <text x="1039" y="429" fill="#a8d0ef" font-family="Verdana" font-size="20" font-weight="700">executing</text>
+
+  <rect x="910" y="470" width="360" height="240" rx="18" fill="#0f2236" stroke="#3c6389"/>
+  <text x="940" y="520" fill="#dff0ff" font-family="Verdana" font-size="24" font-weight="700">Controles</text>
+  <text x="940" y="560" fill="#b5d4ee" font-family="Verdana" font-size="16">• ./cli.sh start</text>
+  <text x="940" y="588" fill="#b5d4ee" font-family="Verdana" font-size="16">• ./cli.sh fx-on</text>
+  <text x="940" y="616" fill="#b5d4ee" font-family="Verdana" font-size="16">• ./cli.sh logs</text>
+  <text x="940" y="644" fill="#b5d4ee" font-family="Verdana" font-size="16">• ./cli.sh status</text>
+
+  <text x="90" y="790" fill="#89b2d7" font-family="Verdana" font-size="16">Mockup demonstrativo da experiência visual do Jarvis em ação (web + desktop FX).</text>
+</svg>

@@ -1,13 +1,11 @@
 (() => {
   // URL Base para buscar os arquivos raw do seu repositório no GitHub
-  const REPO_RAW_URL = 'https://raw.githubusercontent.com/ksevendeveloper/Jarvis/refs/heads/main';
+const REPO_RAW_URL = 'https://raw.githubusercontent.com/ksevendeveloper/Jarvis/main';
 
   const files = [
     {label: 'README', path: '/README.md'},
     {label: 'INSTALL', path: '/INSTALL.md'},
-    {label: 'Checklist', path: '/Checklist.md'},
-    {label: 'AGENTS', path: '/AGENTS.md'},
-    {label: 'Versão', path: '/VERSION'}
+    {label: 'CHECKLIST', path: '/Checklist.md'}
   ];
 
   const fileListEl = document.getElementById('fileList');
@@ -47,16 +45,21 @@
   }
 
   // Busca o conteúdo diretamente do GitHub Raw
-  async function fetchCandidate(path){
-    const url = REPO_RAW_URL + path;
-    try {
-      const res = await fetch(url, { cache: 'no-store' });
-      if(res.ok) return { text: await res.text(), src: url };
-      throw new Error(`Erro ${res.status}: Arquivo não encontrado`);
-    } catch(e) {
-      throw new Error('Falha ao conectar com o GitHub: ' + e.message);
-    }
+async function fetchCandidate(path){
+  const url = REPO_RAW_URL + path;
+  console.log("Tentando carregar:", url); // Isso mostrará o link exato no console
+  
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if(res.ok) return { text: await res.text(), src: url };
+    
+    // Se der 404, o erro será detalhado aqui
+    throw new Error(`Erro ${res.status}: Não encontrado em ${url}`);
+  } catch(e) {
+    console.error("Falha no fetch:", e.message);
+    throw e;
   }
+}
 
   async function loadAndShow(path, pushState){
     if (!spinner || !docEl) return;
@@ -93,7 +96,7 @@
       spinner.style.display = 'none';
       docEl.innerHTML = `<div class="error-msg" style="color: #ff4d4d; padding: 20px;">
         <strong>Erro ao carregar:</strong> ${err.message}<br>
-        Verifique se o arquivo existe no repositório.
+        Verifique se o arquivo ${path} existe no repositório.
       </div>`;
     }
   }

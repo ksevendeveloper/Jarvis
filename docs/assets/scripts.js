@@ -12,11 +12,14 @@
           menu.style.display='flex';
         }
       }
-      toggle.addEventListener('click', function(){
-        var shown = menu.style.display === 'block';
-        menu.style.display = shown ? 'none' : 'block';
-        toggle.setAttribute('aria-expanded', String(!shown));
-      });
-      mq.addListener(update);
-      update();
+
+      if (toggle) {
+        toggle.addEventListener('click', function(){
+          var shown = menu.style.display === 'block';
+          menu.style.display = shown ? 'none' : 'block';
+          toggle.setAttribute('aria-expanded', String(!shown));
+        });
+        mq.addListener(update);
+        update();
+      }
     })();

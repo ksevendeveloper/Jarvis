@@ -1,33 +1,98 @@
-
-.file-list{list-style:none;padding:8px 0;margin:0;display:flex;flex-direction:column;gap:8px}
-.file-list a{display:block;padding:10px 12px;border-radius:8px;color:var(--muted);text-decoration:none;background:transparent}
-.file-list a.active, .file-list a:hover{background:linear-gradient(90deg, rgba(125,211,252,0.06), rgba(96,165,250,0.04));color:#e6eef6}
-.footer{margin-top:auto;font-size:13px;color:var(--muted)}
-.content{flex:1;padding:12px}
-.doc{background:var(--card);color:#071124;padding:32px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6);min-height:60vh}
-.doc h1{font-size:28px;margin-top:0}
-.doc h2{font-size:20px}
-.doc p{line-height:1.65;color:#334155}
-.doc a{color:var(--accent-2)}
-.meta-block{font-size:13px;color:var(--muted);margin-bottom:8px}
-.spinner{color:var(--muted)}
-
-/* responsive */
-@media (max-width: 900px){
-  .container{flex-direction:column;padding:8px;margin:8px}
-  .sidebar{width:100%;order:2;margin-right:0}
-  .content{order:1}
-  #toggleMenu{display:block}
+.docs-wrapper {
+  display: flex; 
+  gap: 24px;
+  max-width: 100%;
+  align-items: flex-start;
+  overflow-x: hidden;
 }
 
-@media (min-width:901px){
-  #toggleMenu{display:none}
+#sidebar {
+  width: 220px;
+  flex-shrink: 0;
 }
 
-/* Markdown content styles */
-.doc img{max-width:100%;border-radius:8px}
-.doc pre{background:#0b1220;color:#e6eef6;padding:16px;border-radius:8px;overflow:auto}
-.doc code{background:#f1f5f9;padding:4px 8px;border-radius:6px;color:#071124}
-.doc table{width:100%;border-collapse:collapse;margin:12px 0}
-.doc table th,.doc table td{border:1px solid #e6eef6;padding:10px}
-.toc{margin-bottom:12px;padding:8px;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);border-radius:8px}
+/* Lista de arquivos */
+.file-list { list-style: none; padding: 0; margin: 0; }
+.file-list li { margin-bottom: 5px; }
+.file-list a {
+  display: block;
+  padding: 12px 15px;
+  border-radius: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: rgba(30, 41, 59, 0.5);
+}
+.file-list a.active, .file-list a:hover {
+  background: rgba(6, 182, 212, 0.1);
+  color: #22d3ee;
+  border-left: 3px solid #06b6d4;
+}
+
+/* Área de Dados Limitada */
+.docs-content {
+  flex: 1;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden; /* Garante que nada saia do card */
+  display: flex;
+  flex-direction: column;
+}
+
+#doc {
+  max-height: 65vh; /* Limita a altura em 65% da tela */
+  overflow-y: auto;
+  overflow-x: hidden; /* Elimina o scroll << >> */
+  padding: 32px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(6, 182, 212, 0.2) transparent;
+}
+
+/* Scrollbar Personalizada (Chrome/Safari) */
+#doc::-webkit-scrollbar { width: 6px; }
+#doc::-webkit-scrollbar-track { background: #1e293b; }
+#doc::-webkit-scrollbar-thumb { 
+  background: #06b6d4; 
+  border-radius: 10px; 
+}
+
+
+/* Estilos internos do Markdown */
+.markdown-body h1, .markdown-body h2 { color: #f8fafc; margin-top: 0; }
+.markdown-body pre { 
+  background: #010409 !important; 
+  padding: 16px; 
+  border-radius: 8px; 
+  overflow-x: auto;
+  max-width: 100%; 
+}
+.markdown-body code { font-family: 'Fira Code', monospace; }
+
+/* Ajuste Global para Imagens dentro do Markdown */
+.markdown-body img {
+    display: block;
+    max-width: 100%; /* Impede que a imagem ultrapasse a largura do card */
+    height: auto;    /* Mantém a proporção original */
+    margin: 24px auto; /* Centraliza a imagem e dá respiro vertical */
+    border-radius: 12px; /* Cantos arredondados seguindo a vibe da marca */
+    border: 1px solid rgba(6, 182, 212, 0.2); /* Borda fina em ciano/turquesa */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidade */
+    transition: transform 0.3s ease;
+}
+
+
+
+/* Efeito de zoom suave ao passar o mouse (opcional) */
+.markdown-body img:hover {
+    transform: scale(1.02);
+    border-color: rgba(6, 182, 212, 0.5);
+}
+
+/* Garante que links com imagens não tenham estilos estranhos */
+.markdown-body a img {
+    margin: 0 auto;
+}
