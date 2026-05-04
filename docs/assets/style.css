@@ -171,3 +171,82 @@
       .topbar { padding: 8px; }
       .hero { padding: 18px; }
     }
+
+/* Floating GitHub FAB */
+.github-fab{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* cor oficial do Jarvis (accent cyan) */
+  background: linear-gradient(180deg, var(--cyan), var(--cyan));
+  color: #07233c;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.5);
+  text-decoration: none;
+  z-index: 9999;
+}
+.github-fab svg{display:block}
+.github-fab:hover{transform: translateY(-4px); filter: brightness(1.02);}
+
+@media (max-width: 600px){
+  .github-fab{right:12px;bottom:12px;width:48px;height:48px}
+}
+
+/* counters inside FAB */
+.github-fab .gh-count{
+  position: absolute;
+  right: 8px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.github-fab .gh-stars{ top: 8px; }
+.github-fab .gh-forks{ top: 30px; }
+
+/* reduce visual clutter on very small screens */
+@media (max-width:380px){
+  .github-fab .gh-forks{ display:none }
+  .github-fab .gh-stars{ top: 50%; transform: translateY(-50%); right:10px }
+}
+
+/* tooltip for FAB */
+.github-fab[data-tooltip]::after{
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 50%;
+  transform: translateX(50%) translateY(6px);
+  background: rgba(4, 35, 53, 0.96);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .14s ease, transform .14s ease;
+  z-index: 10000;
+}
+.github-fab[data-tooltip]::before{
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: calc(50% - 6px + 12px);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(4,35,53,0.96) transparent transparent transparent;
+  opacity: 0;
+  transition: opacity .14s ease;
+  z-index: 10000;
+}
+.github-fab:hover[data-tooltip]::after{ opacity:1; transform: translateX(50%) translateY(0); }
+.github-fab:hover[data-tooltip]::before{ opacity:1; }
