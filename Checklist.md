@@ -114,4 +114,6 @@ Como proceder
   4. Expandir `conscience` para regras e auditoria antes da execução.
   5. Criar Dockerfile e pipeline CI para deploy contínuo.
 
+Implementação status: adicionei scaffold Alembic (`alembic/`), primeira migration inicial (`alembic/versions/0001_initial.py`), modelos para `RefreshToken` e endpoints básicos de refresh em `api/auth.py`, e um rate-limiter simples em `api/ratelimit.py`. Também adicionei `VERSION`/`AUTHORS` e `scripts/generate_docs_metadata.py` e `docs/metadata.json` para a página de documentação dinâmica.
+
 O arquivo `Checklist.md` foi atualizado com o estado atual. Quer que eu comece pela prioridade 1 (Alembic + Postgres) ou outra tarefa?

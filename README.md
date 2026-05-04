@@ -85,6 +85,12 @@ Observações adicionais
 - O backend tentará usar `DATABASE_URL` (Postgres) se definido; caso contrário, o sistema faz fallback para um arquivo SQLite `jarvis.db` (útil para desenvolvimento).
 - O `core/ai.JarvisAI` tenta se comunicar com Ollama via HTTP (por padrão `http://localhost:11434`). Configure `OLLAMA_HOST` e `OLLAMA_MODEL` via variáveis de ambiente se necessário.
 
+Notas recentes de segurança e arquitetura:
+- Implementado suporte básico a `refresh tokens` (armazenados em DB) e endpoint `POST /auth/refresh`.
+- `api/chat` tem um rate limiter simples; para produção substitua por Redis-based limiter.
+- `core/voice.py` contém stubs para STT/TTS (substituir por Vosk/Whisper/Coqui conforme necessidade).
+- Alembic scaffold e primeira migration criados em `alembic/`.
+
 Instalador inteligente
 
 Use `scripts/installer.sh` para detectar recursos do sistema e instalar componentes recomendados.

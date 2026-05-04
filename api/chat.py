@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from db import get_db
@@ -8,6 +8,7 @@ from core.conscience import Conscience
 from core.ai import JarvisAI
 from typing import Optional
 import main as main_app
+from api.ratelimit import rate_limit
 
 router = APIRouter()
 
@@ -17,11 +18,15 @@ class ChatRequest(BaseModel):
 
 
 @router.post("/chat")
-async def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    # security check
+async def chat(req: ChatRequest, request: Request, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    # basic rate limiting: 20 reqs per minute per client
+    limiter = rate_limit('chat', limit=20, period=60)
+    limiter(request)
+    # security check with auditing
     conscience = Conscience()
-    if not conscience.check_action(req.message):
-        raise HTTPException(status_code=403, detail="Action forbidden by conscience")
+    allowed, reason = conscience.evaluate_action(req.message, user=current_user.username if current_user else None)
+    if not allowed:
+        raise HTTPException(status_code=403, detail=reason)
 
     # save user message
     conv = Conversation(user_id=current_user.id, role="user", content=req.message)

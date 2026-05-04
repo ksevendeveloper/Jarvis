@@ -23,3 +23,12 @@ class Conversation(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="conversations")
+
+
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    token = Column(String(512), nullable=False, unique=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
