@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jarvis • Site Oficial do Projeto</title>
+  <meta name="description" content="Site oficial do Jarvis: guia completo, documentação, funcionalidades, changelog, kseven, downloads, autores e roadmap." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="topbar">
+      <div class="brand">Jarvis</div>
+      <nav class="nav" id="mainNav">
+        <button id="menuToggle" aria-expanded="false" style="background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 10px;border-radius:8px;display:none">Menu</button>
+        <div id="menuItems">
+          <a href="#visao-geral">Visão Geral</a>
+          <a href="#guia">Guia</a>
+          <a href="#funcionalidades">Funcionalidades</a>
+          <a href="#docs">Documentação</a>
+          <a href="#versoes">Versionamento</a>
+          <a href="#downloads">Downloads</a>
+          <a href="#autores">Autores</a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero" id="visao-geral">
+      <h1>Jarvis • Assistente Self-Hosted Seguro e Visual</h1>
+      <p>Projeto completo para automação local com FastAPI, Socket.IO, autenticação JWT, políticas de execução e feedback visual em tempo real na web e no desktop.</p>
+      <div class="badges">
+        <span class="badge">FastAPI + Socket.IO</span>
+        <span class="badge">JWT obrigatório em /api/execute</span>
+        <span class="badge">Conscience + Allowlist</span>
+        <span class="badge">Desktop FX</span>
+        <span class="badge">Systemd Ready</span>
+        <span class="badge">Pytest inicial</span>
+      </div>
+      <div class="cta">
+        <a class="btn btn-main" href="/docs.html?file=%2FREADME.md">Abrir README</a>
+        <a class="btn btn-alt" href="/docs.html?file=%2FINSTALL.md">Instalação Completa</a>
+        <a class="btn btn-alt" href="/docs.html?file=%2FChecklist.md">Checklist Técnico</a>
+      </div>
+    </section>
+
+    <section class="section" id="guia">
+      <h2>Guia Rápido</h2>
+      <div class="grid">
+        <article class="card col-6">
+          <h3>Setup</h3>
+          <div class="code">python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+PYTHONPATH=. python3 scripts/bootstrap_db.py --create-admin admin admin</div>
+        </article>
+        <article class="card col-6">
+          <h3>Execução</h3>
+          <div class="code">./cli.sh start
+./cli.sh status
+./cli.sh fx-on
+./cli.sh logs</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="funcionalidades">
+      <h2>Funcionalidades</h2>
+      <div class="grid">
+        <article class="card col-4">
+          <h3>Backend Seguro</h3>
+          <p>Endpoints REST e Socket.IO com autenticação JWT e validação de conexão por token.</p>
+        </article>
+        <article class="card col-4">
+          <h3>Execução Controlada</h3>
+          <p><code>/api/execute</code> protegido por JWT, policy de segurança e allowlist de comandos.</p>
+        </article>
+        <article class="card col-4">
+          <h3>Visual em Ação</h3>
+          <p>Efeito visual no dashboard web e orb desktop com <code>fx-on/fx-off</code>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="docs">
+      <h2>Documentação e Diagramas</h2>
+      <div class="images">
+        <img src="images/architecture.svg" alt="Arquitetura Jarvis" />
+        <img src="images/workflow.svg" alt="Workflow Jarvis" />
+        <img src="images/ui-mockup.svg" alt="UI mockup Jarvis" />
+      </div>
+      <div class="grid" style="margin-top:12px;">
+        <article class="card col-4"><h3>README</h3><p>Visão geral e comandos principais.</p><p><a class="btn btn-alt" href="/docs.html?file=%2FREADME.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>INSTALL</h3><p>Instalação completa, systemd e ambiente.</p><p><a class="btn btn-alt" href="/docs.html?file=%2FINSTALL.md">Abrir</a></p></article>
+        <article class="card col-4"><h3>Checklist</h3><p>Status real do projeto e próximos passos.</p><p><a class="btn btn-alt" href="/docs.html?file=%2FChecklist.md">Abrir</a></p></article>
+      </div>
+    </section>
+
+    <section class="section" id="versoes">
+      <h2>Versionamento e Changelog</h2>
+      <table class="table">
+        <thead>
+          <tr><th>Versão</th><th>Data</th><th>Status</th><th>Resumo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>v0.4.0</td><td>2026-05-03</td><td class="state-ok">Atual</td><td>Hardening em <code>/api/execute</code>, testes iniciais, systemd, desktop FX e docs visuais completas.</td></tr>
+          <tr><td>v0.3.0</td><td>2026-05-03</td><td class="state-ok">Estável</td><td>Autenticação JWT em login e Socket.IO, scaffolds backend/frontend e CLI funcional.</td></tr>
+          <tr><td>v0.2.0</td><td>2026-05-03</td><td class="state-wip">Histórico</td><td>Estrutura inicial, scripts e documentação base.</td></tr>
+          <tr><td>v0.5.0 (planejada)</td><td>TBD</td><td class="state-risk">Planejada</td><td>CI, Docker, melhorias de segurança (rate limiting/refresh tokens), expansão de testes.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="downloads">
+      <h2>Downloads e Releases</h2>
+      <div class="grid">
+        <article class="card col-6">
+          <h3>Código-fonte</h3>
+          <p>Clone direto do repositório:</p>
+          <div class="code">git clone https://github.com/ksevendeveloper/Jarvis.git jarvis
+cd jarvis</div>
+        </article>
+        <article class="card col-6">
+          <h3>Pacote local (manual)</h3>
+          <p>Gerar tarball para distribuição interna:</p>
+          <div class="code">git archive --format=tar.gz --output jarvis-v0.4.0.tar.gz main</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="autores">
+      <h2>Autores e Contribuição</h2>
+      <div class="authors">
+        <article class="card">
+          <h3>Equipe Projeto Jarvis</h3>
+          <p>Mantenedores: equipe local de desenvolvimento e automação.</p>
+          <p>Contato: atualize este bloco com e-mails/links do time.</p>
+        </article>
+        <article class="card">
+          <h3>Como contribuir</h3>
+          <p>1. Crie branch feature.</p>
+          <p>2. Rode testes <code>pytest -q</code>.</p>
+          <p>3. Abra PR com descrição técnica e impacto.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <h2>Roadmap</h2>
+      <div class="grid">
+        <article class="card col-4"><h3>Segurança</h3><p>Rate limiting, refresh tokens, auditoria detalhada por usuário.</p></article>
+        <article class="card col-4"><h3>IA e Voz</h3><p>Integração Ollama completa e STT/TTS local funcional.</p></article>
+        <article class="card col-4"><h3>DevOps</h3><p>CI/CD, Docker, monitoramento e hardening de produção.</p></article>
+      </div>
+    </section>
+
+    <footer>
+      Jarvis • Site completo de documentação e release • Última atualização: 2026-05-03.
+    </footer>
+  </main>
+  <script src="assets/scripts.js"></script>
+  <!-- Floating GitHub button -->
+  <a class="github-fab" href="https://github.com/ksevendeveloper/Jarvis" target="_blank" rel="noopener noreferrer" aria-label="Abrir repositório no GitHub" data-tooltip="Ver no GitHub">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 .5C5.73.5.5 5.73.5 12.02c0 5.08 3.29 9.39 7.86 10.92.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.36-1.3-1.72-1.3-1.72-1.06-.73.08-.72.08-.72 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.72 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.45.11-3.02 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.5 3.17-1.18 3.17-1.18.63 1.57.23 2.73.11 3.02.74.81 1.19 1.84 1.19 3.1 0 4.45-2.7 5.42-5.27 5.71.42.36.8 1.08.8 2.18 0 1.58-.01 2.86-.01 3.25 0 .31.21.68.8.56C20.21 21.4 23.5 17.09 23.5 12.02 23.5 5.73 18.27.5 12 .5z"/>
+    </svg>
+  </a>
+</body>
+</html>

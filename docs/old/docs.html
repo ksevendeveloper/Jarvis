@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jarvis • Documentação Oficial</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/viewer.css" />
+  
+  <!-- Dependências: Markdown e Syntax Highlight -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+  <main class="container">
+    <header class="topbar">
+      <div class="brand">Jarvis</div>
+      <nav class="nav" id="mainNav">
+        <div id="menuItems">
+          <a href="index.html#visao-geral">Visão Geral</a>
+          <a href="index.html#docs">Documentação</a>
+          <a href="index.html#downloads">Downloads</a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="section" id="docs">
+      <div class="docs-wrapper">
+        <!-- Barra lateral -->
+        <aside id="sidebar">
+          <ul id="fileList" class="file-list"></ul>
+        </aside>
+
+        <!-- Área de Conteúdo Limitada -->
+        <article class="card docs-content">
+          <div id="spinner" class="spinner">Carregando...</div>
+          <div id="doc" class="markdown-body">
+            <!-- Conteúdo injetado via JS -->
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      Jarvis • Desenvolvido por K'Seven • 2026
+    </footer>
+  </main>
+  
+  <script src="assets/scripts.js"></script>
+  <script src="assets/viewer.js"></script>
+</body>
+</html>

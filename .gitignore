@@ -5,6 +5,7 @@ __pycache__/
 venv/
 dist/
 build/
+gitpage/
 .DS_Store
 .idea/
 node_modules/
